@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.conf.global_settings import STATICFILES_DIRS
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -40,6 +41,9 @@ INSTALLED_APPS = (
 
     'south',
     'djangobower',
+    'crispy_forms',
+
+    'goodies'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -94,7 +98,6 @@ STATICFILES_FINDERS = global_settings.STATICFILES_FINDERS + ('djangobower.finder
 
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, "static")
 
-
 BOWER_INSTALLED_APPS = (
     'jquery#1.9',
     'underscore',
@@ -102,3 +105,13 @@ BOWER_INSTALLED_APPS = (
     'bootstrap',
     'less.js',
 )
+
+STATICFILES_DIRS = (
+    ("css", os.path.join(BASE_DIR, "static", "css")),
+)
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+RECAPTCHA_PUBLIC_KEY = ""
+RECAPTCHA_PRIVATE_KEY = ""
+GOOGLE_API_KEY = ""

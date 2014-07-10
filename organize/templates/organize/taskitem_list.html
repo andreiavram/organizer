@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block page_title %}Tasks <small>all tasks</small>{% endblock %}
+
+{% block content %}
+    <table class = "table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Task</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in object_list %}
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>{{ task.title }}</td>
+                    <td>&nbsp;</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td></td>
+                    <td colspan="2" style="text-align: left;"><em>{% trans "No tasks" %}</em></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

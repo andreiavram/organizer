@@ -25,6 +25,7 @@ class TaskItem(models.Model):
     changed_date = models.DateTimeField(auto_now=True)
 
     status = models.CharField(max_length=255, choices=TAKSITEM_STATUSES)
+    owner = models.ForeignKey("auth.User", null=True, blank=True)
 
     class Meta:
         ordering = ["-start_date"]
