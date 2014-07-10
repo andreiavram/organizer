@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="Organizer">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="{% static "bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
-
+    <link href="{% static "angular-ui/build/angular-ui.css" %}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{% static "css/base.css" %}" rel="stylesheet">
 
@@ -27,7 +27,7 @@
       {% endblock %}
   </head>
 
-  <body>
+  <body ng-controller="TaskController">
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -70,6 +70,9 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "angular/angular.js" %}"></script>
+    <script src="{% static "angular-ui/build/angular-ui.js" %}"></script>
+    <script src="{% static "js/app/app.js" %}"></script>
     {% block extrajs %}
     {% endblock %}
   </body>

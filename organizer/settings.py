@@ -102,12 +102,14 @@ BOWER_INSTALLED_APPS = (
     'jquery#1.9',
     'underscore',
     'angular',
+    'angular-ui',
     'bootstrap',
     'less.js',
 )
 
 STATICFILES_DIRS = (
     ("css", os.path.join(BASE_DIR, "static", "css")),
+    ("js", os.path.join(BASE_DIR, "static", "js")),
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
