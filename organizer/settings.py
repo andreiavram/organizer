@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'south',
     'djangobower',
     'crispy_forms',
+    'rest_framework',
 
     'goodies'
 )
@@ -100,9 +101,10 @@ BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, "static")
 
 BOWER_INSTALLED_APPS = (
     'jquery#1.9',
-    'underscore',
-    'angular',
+    'anguar#1.3',
+    'angular-resource#1.3',
     'angular-ui',
+    'lodash',
     'bootstrap',
     'less.js',
 )

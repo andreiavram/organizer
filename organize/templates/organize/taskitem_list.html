@@ -6,7 +6,7 @@
 {% block content %}
     <div class = "row">
         <div class = "col-md-12">
-            <input ui-event="{keyup: 'processEvent($event)' }" ng-model="task_input" type="text" placeholder="add tasks here" class = "form-control">
+            <input ng-keyup="processTask($event)" ng-model="task_input" type="text" placeholder="add tasks here" class = "form-control">
         </div>
     </div>
     <div class = "row">
@@ -20,17 +20,15 @@
             Actions
         </div>
     </div>
-    {% for task in object_list %}
-    <div class = "row">
+    <div class = "row" ng-repeat="task in tasks">
         <div class = "col-md-1">
             <input type="checkbox">
         </div>
         <div class = "col-md-8">
-            {{ task.title }}
+            [[ task.title ]]
         </div>
         <div class = "col-md-3">
             &nbsp;
         </div>
     </div>
-    {% endfor %}
 {% endblock %}
