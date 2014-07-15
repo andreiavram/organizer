@@ -4,3 +4,12 @@ body {
 .base {
   padding: 20px 15px;
 }
+
+
+div.task_list {
+    margin-top: 25px;
+}
+
+div.task_list div.row {
+    padding: 3px 0;
+}

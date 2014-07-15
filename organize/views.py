@@ -10,6 +10,11 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from organize.forms import TaskItemForm
 from organize.models import TaskItem
+from rest_framework import permissions
+from rest_framework import viewsets
+from rest_framework import generics
+from organize.permissions import IsOwnerOrReadOnly
+from organize.serializers import TaskSerializer
 
 
 class TaskList(ListView):
@@ -37,3 +42,10 @@ class TaskCreate(CreateView):
         self.object.save()
         messages.success("Task has been saved")
         return HttpResponseRedirect(reverse("task_list"))
+
+
+class TaskItemViewSet(viewsets.ModelViewSet):
+    queryset = TaskItem.objects.all()
+    serializer_class = TaskSerializer
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+

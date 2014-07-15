@@ -21,40 +21,42 @@ angular.module('Organizer').factory('_', ['$window',
     ]);
 
 angular.module('Organizer').factory('TaskService', ['$resource', function TaskService($resource) {
-    return $resource('/api/answer/:id/', {
-        id: '@id'
-    }, {
-        add_task: {
-            method: 'POST',
-            url: '/api/task/'
-        }
-    });
-}]);
+        return $resource('/api/tasks/:id/', {
+            id: '@id'
+        });
+    }
+]);
 
 
 angular.module("Organizer").controller("TaskController", ["$scope", "TaskService", function TaskController($scope, TaskService) {
-    $scope.$watch("task_input", function (data) {
-        console.log(data);
+    $scope.new_task = {};
+
+    TaskService.query(function (data) {
+        $scope.tasks = data;
     });
 
-    $scope.tasks = [
-        {
-            title: "mail idei strategie",
-            id: 1,
-            user: "yeti"
-        }
+    $scope.task_errors = {};
 
-    ]
-
-    $scope.processTask = function processTask(e) {
-        if (e.keyCode == 13) {
-            $scope.tasks.push({
-                id: null,
-                title: $scope.task_input,
-                user: "yeti"
-            });
-            $scope.task_input = "";
-        }
+    $scope.process_task = function process_task(e) {
         e.preventDefault();
+        if (e.keyCode == 13) {
+            TaskService.save($scope.new_task, function(data) {
+                $scope.tasks.push(data);
+                $scope.new_task = {};
+            }, function (data) {
+                $scope.task_errors = data.data
+            });
+        };
+
+        var at_index = $scope.new_task.title.indexOf("@");
+        if (at_index != -1) {
+            console.log($scope.new_task.title.substring(at_index + 1));
+        }
+    }
+
+    $scope.remove_task = function remove_task(task) {
+        TaskService.remove(task, function(data) {
+            $scope.tasks = _.without($scope.tasks, task);
+        });
     }
 }]);
