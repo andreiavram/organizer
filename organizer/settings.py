@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from django.conf.global_settings import STATICFILES_DIRS
+from django.conf.global_settings import STATICFILES_DIRS, LOGIN_REDIRECT_URL
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -128,6 +128,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 RECAPTCHA_PUBLIC_KEY = ""
 RECAPTCHA_PRIVATE_KEY = ""
 GOOGLE_API_KEY = ""
+
+LOGIN_REDIRECT_URL = "/"
 
 try:
     from local_settings import *
