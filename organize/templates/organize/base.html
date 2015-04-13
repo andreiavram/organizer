@@ -14,7 +14,11 @@
 
     <!-- Bootstrap core CSS -->
     <link href="{% static "bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "fontawesome/css/font-awesome.min.css" %}">
     <link href="{% static "angular-ui/build/angular-ui.css" %}" rel="stylesheet">
+    <link href="{% static "ng-tags-input/ng-tags-input.min.css" %}" rel="stylesheet">
+    <link href="{% static "ng-tags-input/ng-tags-input.bootstrap.min.css" %}" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!-- Custom styles for this template -->
     <link href="{% static "css/base.css" %}" rel="stylesheet">
 
@@ -27,7 +31,7 @@
       {% endblock %}
   </head>
 
-  <body ng-controller="TaskController">
+  <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -38,42 +42,41 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Organizer</a>
+          <a class="navbar-brand" href="/#/tasks">Organizer</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="{% url "index" %}">{% trans "Home" %}</a></li>
-              <li><a href="{% url "task_create" %}">{% trans "Create" %}</a></li>
-            <li><a href="#about">{% trans "About" %}</a></li>
-            <li><a href="#contact">{% trans "Contact" %}</a></li>
+            <li class="active"><a href="#/">{% trans "Tasks" %}</a></li>
+{#              <li><a href="#create">{% trans "Create" %}</a></li>#}
+{#            <li><a href="#about">{% trans "About" %}</a></li>#}
+{#            <li><a href="#contact">{% trans "Contact" %}</a></li>#}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
 
-    <div class="container">
-
-      <div class="base">
-          <div class = "page-header">
-            <h1>{% block page_title %}{% endblock %}</h1>
-          </div>
-          {% block content %}
-                <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-          {% endblock %}
-      </div>
-
+    <div class="container" ng-view>
+        {% block content %}{% endblock %}
     </div><!-- /.container -->
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <script>
+        var Config = {
+            TEMPLATE_URL: "{{ STATIC_URL }}templates/"
+        }
+    </script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "lodash/dist/lodash.js" %}"></script>
+    <script src="{% static "lodash/lodash.js" %}"></script>
     <script src="{% static "angular/angular.js" %}"></script>
     <script src="{% static "angular-resource/angular-resource.js" %}"></script>
+    <script src="{% static "angular-route/angular-route.js" %}"
     <script src="{% static "angular-ui/build/angular-ui.js" %}"></script>
+    <script src="{% static "angular-elastic/elastic.js" %}"></script>
+    <script src="{% static "ng-tags-input/ng-tags-input.js" %}"></script>
+    <script src="{% static "angular-nl2br/angular-nl2br.js" %}"></script>
+    <script src="{% static "angular-sanitize/angular-sanitize.js" %}"></script>
     <script src="{% static "js/app/app.js" %}"></script>
     {% block extrajs %}
     {% endblock %}

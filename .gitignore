@@ -4,3 +4,4 @@
 *.log
 db.sqlite3
 static/bower_components/*
+organizer/local_settings*

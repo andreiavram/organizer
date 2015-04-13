@@ -1,8 +1,10 @@
 body {
-  padding-top: 20px;
+    padding-top: 20px;
+    font-family: 'Roboto', sans-serif;
 }
+
 .base {
-  padding: 20px 15px;
+    padding: 20px 15px;
 }
 
 
@@ -12,4 +14,58 @@ div.task_list {
 
 div.task_list div.row {
     padding: 3px 0;
+}
+
+div.task-list-description {
+    color: #666;
+}
+
+div.task-normal {
+    background-color: #fff;
+}
+
+div.task-hover {
+    background-color: #efefef;
+    cursor: pointer;
+}
+
+input.no-border, input.no-border:focus,
+textarea.no-border, textarea.no-border:focus {
+    border: none !important;
+    border-color: transparent !important;
+    outline: none;
+}
+
+.full-width {
+    width: 100%;
+}
+
+tags-input .tags .tag-item .remove-button {
+    color: #e2e2e2;
+}
+
+tags-input .tags .tag-item {
+    color: #333333;
+    background-color: #FFF;
+    border-color: #e2e2e2;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+.top-space {
+    margin-top: 20px;
+}
+
+.red {
+    color: darkred;
+}
+
+.green {
+    color: darkgreen;;
+}
+
+.yellow {
+    color: goldenrod;
 }
