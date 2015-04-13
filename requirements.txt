@@ -1,13 +1,15 @@
-Django==1.6.5
+Django==1.6.11
+MySQL-python==1.2.5
 South==1.0
 argparse==1.2.1
-distribute==0.7.3
-django-bower==5.0.1
+django-bower==5.0.3
 django-crispy-forms==1.4.0
 django-dajax==0.9.2
 django-dajaxice==0.6
 -e git+https://github.com/andreiavram/django_goodies.git@be44f4d10240544a9e46c96617ab0f86a2477bfe#egg=django_goodies-dev
+django-model-utils==2.2
 django-recaptcha==1.0
 django-taggit==0.12
-six==1.7.2
+djangorestframework==3.1.1
+six==1.9.0
 wsgiref==0.1.2
