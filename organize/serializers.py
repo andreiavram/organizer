@@ -9,7 +9,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskItem
         fields = ("id", "title", "description", "start_date", "end_date", "estimated_time", "parent_task", "status",
-                  "owner", "priority", "completed", "tags", "completed_date")
+                  "owner", "priority", "completed", "tags", "completed_date", "changed_date")
 
     tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), required=False)
 

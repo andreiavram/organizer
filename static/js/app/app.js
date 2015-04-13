@@ -85,6 +85,12 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
 
         $scope.refresh_tasks = function () {
             $scope.tasks = Task.query({tags: _.pluck($scope.search_tags, "id"), query: $scope.query, completed: !$scope.show_completed});
+            $scope.tasks.$promise.then(
+                function () {
+                    $scope.tasks = _.sortBy($scope.tasks, "changed_date").reverse();
+                }
+            );
+
         };
 
         $scope.toggle_general_completed = function () {
