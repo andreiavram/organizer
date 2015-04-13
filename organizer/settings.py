@@ -129,7 +129,11 @@ RECAPTCHA_PUBLIC_KEY = ""
 RECAPTCHA_PRIVATE_KEY = ""
 GOOGLE_API_KEY = ""
 
-LOGIN_REDIRECT_URL = "/"
+SITE_ID = 1
+URL_PREFIX = ""
+
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + \
+                              ('organizer.context_processors.url_prefix', )
 
 try:
     from local_settings import *

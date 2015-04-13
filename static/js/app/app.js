@@ -52,7 +52,7 @@ angular.module('Organizer').factory('_', ['$window',
 ]);
 
 angular.module('Organizer').factory('Task', ['$resource', function Task($resource) {
-    return $resource('/api/task/:id/', { id: '@id'},
+    return $resource(Config.URL_PREFIX + '/api/task/:id/', { id: '@id'},
         {
             update: {
                 method: 'PUT' // this method issues a PUT request
@@ -62,7 +62,7 @@ angular.module('Organizer').factory('Task', ['$resource', function Task($resourc
 ]);
 
 angular.module('Organizer').factory('Tag', ['$resource', function Tag($resource) {
-    return $resource('/api/tag/:id/', { id: '@id'},
+    return $resource(Config.URL_PREFIX + '/api/tag/:id/', { id: '@id'},
         {
             update: {
                 method: 'PUT'
