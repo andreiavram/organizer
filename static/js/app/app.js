@@ -111,6 +111,8 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
                     $scope.new_task.tags = _.pluck(_.filter($scope.tags, function (e) {
                         return _.indexOf(tag_list, e.slug) >= 0
                     }), "id");
+                    console.log(res[0]);
+                    $scope.new_task.title = $scope.new_task.title.replace(res[0], "");
                 }
 
                 Task.save($scope.new_task, function (data) {
