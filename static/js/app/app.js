@@ -80,7 +80,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
         $scope.task_errors = {};
         $scope.show_completed = true;
 
-        $scope.mode = 'search';
+        $scope.mode = 'add';
         $scope.mode_names = {search : "Caută", add: "Adaugă"}
 
         $scope.refresh_tasks = function () {
