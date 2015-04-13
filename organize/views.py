@@ -5,7 +5,7 @@ from django.db.models.query_utils import Q
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from organize.models import TaskItem, Tag
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from organize.serializers import TaskSerializer, TagSerializer
 
 
@@ -20,7 +20,7 @@ class MainAppView(TemplateView):
 class TaskItemViewSet(viewsets.ModelViewSet):
     queryset = TaskItem.objects.all()
     serializer_class = TaskSerializer
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def __init__(self, *args, **kwargs):
         self.query_tags = []
@@ -47,7 +47,7 @@ class TaskItemViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def __init__(self, *args, **kwargs):
         self.query_slug = None
