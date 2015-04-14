@@ -48,7 +48,7 @@ class TaskItem(models.Model):
     tags = models.ManyToManyField("organize.Tag", null=True, blank=True)
 
     class Meta:
-        ordering = ["-start_date", "-created_date"]
+        ordering = ["-priority", "-start_date", "-created_date"]
 
     def __unicode__(self):
         return self.title
