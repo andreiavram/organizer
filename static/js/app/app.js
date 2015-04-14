@@ -85,13 +85,11 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
 
         $scope.refresh_tasks = function () {
             $scope.tasks = Task.query({tags: _.pluck($scope.search_tags, "id"), query: $scope.query, completed: !$scope.show_completed});
-            $scope.tasks.$promise.then(
-                function () {
-                    $scope.tasks = _.sortBy($scope.tasks, "changed_date").reverse();
-                }
-            );
-
         };
+
+        $scope.$watchCollection("tasks", function (n, o) {
+            $scope.tasks = _.sortBy($scope.tasks, "changed_date").reverse();
+        });
 
         $scope.toggle_general_completed = function () {
             $scope.show_completed = !$scope.show_completed;
@@ -117,7 +115,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
                     $scope.new_task.tags = _.pluck(_.filter($scope.tags, function (e) {
                         return _.indexOf(tag_list, e.slug) >= 0
                     }), "id");
-                    console.log(res[0]);
+
                     $scope.new_task.title = $scope.new_task.title.replace(res[0], "");
                 }
 
@@ -161,7 +159,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
         $scope.toggle_completed = function toggle_completed(task) {
             task.completed = !task.completed;
             task.$update();
-        }
+        };
 
         $scope.tags_for_task = function (task) {
             return _.filter($scope.tags, function (e) {
