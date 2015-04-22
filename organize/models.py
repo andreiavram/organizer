@@ -37,6 +37,8 @@ class TaskItem(models.Model):
 
     parent_task = models.ForeignKey("TaskItem", null=True, blank=True)
 
+    order = models.IntegerField(default=0)
+
     created_date = models.DateTimeField(auto_now_add=True)
     changed_date = models.DateTimeField(auto_now=True)
 
@@ -48,7 +50,7 @@ class TaskItem(models.Model):
     tags = models.ManyToManyField("organize.Tag", null=True, blank=True)
 
     class Meta:
-        ordering = ["-priority", "-start_date", "-created_date"]
+        ordering = ["order", "-priority", "-start_date", "-created_date"]
 
     def __unicode__(self):
         return self.title

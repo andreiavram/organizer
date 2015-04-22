@@ -88,7 +88,9 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
         };
 
         $scope.$watchCollection("tasks", function (n, o) {
-            $scope.tasks = _.sortBy($scope.tasks, "changed_date").reverse();
+            if ($scope.tasks.$resolved) {
+                $scope.tasks = _.sortBy($scope.tasks, "changed_date").reverse();
+            }
         });
 
         $scope.toggle_general_completed = function () {
@@ -103,7 +105,6 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
         $scope.$watchCollection("search_tags", function (n, o) {
             $scope.refresh_tasks();
         });
-
 
         $scope.process_task = function process_task(e) {
             e.preventDefault();
@@ -185,7 +186,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
             if (_.indexOf(tag_ids, tag.id) >= 0) {
                 $scope.search_tags = _.reject($scope.search_tags, {"id" : tag.id});
             }
-        }
+        };
 
         $scope.add_tag_to_search = function (tag) {
             var tag_ids = _.pluck($scope.search_tags, "id");
