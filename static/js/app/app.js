@@ -78,7 +78,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
         $scope.tags = Tag.query();
         $scope.search_tags = [];
         $scope.task_errors = {};
-        $scope.show_completed = true;
+        $scope.show_completed = false;
 
         $scope.mode = 'add';
         $scope.mode_names = {search : "Caută", add: "Adaugă"}
@@ -122,6 +122,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
 
                 Task.save($scope.new_task, function (data) {
                     $scope.tasks.push(data);
+                    $scope.refresh_tasks();
                     $scope.new_task = {};
                 }, function (data) {
                     $scope.task_errors = data.data
