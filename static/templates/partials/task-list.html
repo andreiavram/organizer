@@ -53,7 +53,7 @@
             </div>
             <div class = "col-md-7" ng-click="redirect_to(task)">
                 <div ng-bind="task.title" ng-class="{strikethrough: task.completed}"></div>
-                <div class = "task-list-description" ng-cloak ng-show="task.description.length > 0"><small>[[ task.description ]]</small></div>
+                <div class = "task-list-description" ng-cloak ng-show="task.description.length > 0"><small>[[ task.description | limitTo:200 ]]</small></div>
             </div>
             <div class = "col-md-3">
                 <div class = "pull-right">
