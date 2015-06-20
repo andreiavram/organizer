@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
-from organize.models import TaskItem, Tag
+from organize.models import TaskItem, Tag, Project
 from rest_framework import viewsets, permissions
-from organize.serializers import TaskSerializer, TagSerializer
+from organize.serializers import TaskSerializer, TagSerializer, ProjectSerializer
 
 
 class MainAppView(TemplateView):
@@ -62,3 +62,9 @@ class TagViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         self.query_slug = request.GET.get("slug")
         return super(TagViewSet, self).list(request, *args, **kwargs)
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = (permissions.IsAuthenticated, )

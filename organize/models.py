@@ -26,7 +26,6 @@ class TaskItem(models.Model):
         (LOW, u"Joasă")
     )
 
-
     title = models.CharField(max_length=1024)
     description = models.TextField(null=True, blank=True)
 
@@ -47,7 +46,9 @@ class TaskItem(models.Model):
     priority = models. IntegerField(max_length=255, choices=TASKITEM_PRIORITIES, default=NORMAL)
 
     owner = models.ForeignKey("auth.User", null=True, blank=True)
-    tags = models.ManyToManyField("organize.Tag", null=True, blank=True)
+    tags = models.ManyToManyField("organize.Tag", null=True, blank=True, related_name="tasks")
+
+    project = models.ForeignKey("organize.Project", null=True, blank=True, related_name="tasks")
 
     class Meta:
         ordering = ["order", "-priority", "-start_date", "-created_date"]
@@ -59,6 +60,7 @@ class TaskItem(models.Model):
 class Project(models.Model):
     title = models.CharField(max_length=1024)
     description = models.TextField(null=True, blank=True)
+    slug = models.SlugField()
 
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
@@ -70,6 +72,11 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Project, self).save(**kwargs)
 
 
 class Tag(models.Model):

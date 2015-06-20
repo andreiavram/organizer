@@ -1,0 +1,32 @@
+<div class="base">
+    <div class = "page-header">
+        <div class = "row">
+            <div class = "col-md-10">
+                <h1>Tags <small>keep things together!</small></h1>
+            </div>
+        </div>
+
+    </div>
+    <div class = "tag">
+        <div class = "row" ng-repeat="tag in tags"  ng-init = "tag_class = 'task-normal'" ng-class="task_class"
+             ng-mouseenter="tag_class = 'task-hover'"
+             ng-mouseleave="tag_class  = 'task-normal'">
+            <div class = "col-md-10">
+                <div style="height: 30px;">
+                    <span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]"
+                          class = "label label-default">
+                        [[ tag.name ]]
+                    </span>
+                </div>
+            </div>
+            <div class = "col-md-1">
+                <span class = "badge">[[ tag.count ]]</span>
+            </div>
+            <div class = "col-md-1">
+                <div class = "btn-group btn-group-xs pull-right">
+                    <a class = "btn btn-default" ng-click="remove_tag(tag);"><div class = "glyphicon glyphicon-trash"></div></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

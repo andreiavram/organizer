@@ -36,6 +36,18 @@ angular.module("Organizer").config(["$routeProvider", function ($routeProvider) 
             templateUrl: Config.TEMPLATE_URL + 'partials/task-detail.html',
             controller: 'TaskDetailController'
         }).
+        when('/tags', {
+            templateUrl: Config.TEMPLATE_URL + 'partials/tag-list.html',
+            controller: 'TagListController'
+        }).
+        when('/project', {
+            templateUrl: Config.TEMPLATE_URL + 'partials/project-list.html',
+            controller: 'ProjectListController'
+        }).
+        when('/project/:id', {
+            templateUrl: Config.TEMPLATE_URL + 'partials/project-detail.html',
+            controller: 'ProjectDetailController'
+        }).
         otherwise({
             redirectTo: '/tasks'
         })
@@ -69,6 +81,39 @@ angular.module('Organizer').factory('Tag', ['$resource', function Tag($resource)
             }
         })
 }]);
+
+angular.module('Organizer').factory('Project', ['$resource', function Project($resource) {
+    return $resource(Config.URL_PREFIX + '/api/project/:id/', { id: '@id'},
+        {
+            update: {
+                method: 'PUT'
+            }
+        })
+}]);
+
+angular.module("Organizer").controller("TagListController", ["$scope", "$routeParams", "$location", "Tag",
+    function TagListController($scope, $routeParams, $location, Tag) {
+        $scope.tags = Tag.query();
+
+        $scope.calculate_luminance = function (color) {
+            color = color || "#000000";
+            var number_color = parseInt(color.slice(1), 16);
+            var r = (number_color & 0xff0000) >> 16;
+            var g = (number_color & 0xff00) >> 8;
+            var b = (number_color & 0xff);
+            if ((r * 0.299 + g * 0.587 + b * 0.114) / 256. < 0.5) {
+                return "#FFFFFF";
+            } else {
+                return "#000000";
+            };
+        };
+
+        $scope.remove_tag = function (tag) {
+            Tag.remove(tag, function (data) {
+                $scope.tags = _.without($scope.tags, tag);
+            })
+        }
+    }]);
 
 angular.module("Organizer").controller("TaskListController", ["$scope", "$routeParams", "$location", "Task", "Tag",
     function TaskListController($scope, $routeParams, $location, Task, Tag) {
@@ -288,3 +333,31 @@ angular.module("Organizer").controller("TaskDetailController", ["$scope", "$rout
 
 
     }]);
+
+angular.module("Organizer").controller("ProjectListController", ["$scope", "$routeParams", "$location", "$filter", "Task", "Tag", "Project",
+    function ProjectListController($scope, $routeParams, $location, $filter, Task, Tag, Project) {
+        $scope.projects = Project.query();
+        $scope.tags = Tag.query();
+
+        $scope.redirect_to = function (project) {
+            $location.path('project/' + project.id);
+        }
+    }]);
+
+angular.module("Organizer").controller("ProjectDetailController", ["$scope", "$routeParams", "$location", "$filter", "Task", "Tag", "Project",
+    function ProjectDetailController($scope, $routeParams, $location, $filter, Task, Tag, Project) {
+        $scope.project_id = $routeParams.id;
+        $scope.project = Project.get({id: $scope.project_id});
+        $scope.mode = "view";
+        $scope.new_task = {};
+
+        $scope.save_project_task = function () {
+            $scope.new_task.project = $scope.project_id;
+            Task.save($scope.new_task, function (data) {
+                $scope.new_task = {};
+                $scope.project.tasks.push(data);
+            })
+        }
+
+    }]);
+
