@@ -1,0 +1,39 @@
+<div class="base">
+    <div class = "page-header">
+        <div class = "row">
+            <div class = "col-md-12">
+                <h1>
+                    <div ng-show="tag.id">Edit: [[ tag.name ]]</div>
+                    <div ng-show="tag.id === undefined">Add new tag</div>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <form ng-submit="save_tag(tag)" action = "" method="post">
+    <div class = "row">
+            <div class = "col-md-12">
+                <input class = "form-control" type="text" ng-model="tag.name" placeholder="name">
+            </div>
+    </div>
+        <div class = "row" style="margin-top: 10px;">
+            <div class = "col-md-12">
+                <textarea class = "form-control" ng-model="tag.description" placeholder="description"></textarea>
+            </div>
+        </div>
+        <div class = "row" style="margin-top: 10px;">
+            <div class = "col-md-12">
+                <color-picker ng-model="tag.color"  color-picker-format="'hex'"></color-picker>
+            </div>
+        </div>
+        <div class = "row" style="margin-top: 10px;">
+            <div class = "col-md-ang12">
+                <div class="pull-right"><button type="submit" class="btn btn-primary">Save</button></div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+

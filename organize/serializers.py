@@ -18,7 +18,7 @@ class TaskSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ("id", "slug", "name", "color", "count")
+        fields = ("id", "slug", "name", "description", "color", "count")
 
     count = serializers.SerializerMethodField()
 

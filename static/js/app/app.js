@@ -2,7 +2,7 @@
  * Created by andrei on 10/07/14.
  */
 
-var Organizer = angular.module("Organizer", ["ngResource", "ngRoute", "monospaced.elastic", "ngTagsInput", "nl2br", "ngSanitize"]);
+var Organizer = angular.module("Organizer", ["ngResource", "ngRoute", "monospaced.elastic", "ngTagsInput", "nl2br", "ngSanitize", "color.picker"]);
 var Config = Config || {};
 
 angular.module("Organizer").config(['$interpolateProvider', '$resourceProvider', '$httpProvider' , function ($interpolateProvider, $resourceProvider, $httpProvider) {
@@ -28,7 +28,7 @@ angular.module("Organizer").filter('parseUrlFilter', function () {
 
 angular.module("Organizer").config(["$routeProvider", function ($routeProvider) {
     $routeProvider.
-        when('/tasks', {
+        when('/tasks/:tag?', {
             templateUrl: Config.TEMPLATE_URL + 'partials/task-list.html',
             controller: 'TaskListController'
         }).
@@ -39,6 +39,14 @@ angular.module("Organizer").config(["$routeProvider", function ($routeProvider) 
         when('/tags', {
             templateUrl: Config.TEMPLATE_URL + 'partials/tag-list.html',
             controller: 'TagListController'
+        }).
+        when('/tags/create', {
+            templateUrl: Config.TEMPLATE_URL + 'partials/tag-from.html',
+            controller: 'TagFormController'
+        }).
+        when('/tags/:id/update', {
+            templateUrl: Config.TEMPLATE_URL + 'partials/tag-form.html',
+            controller: 'TagFormController'
         }).
         when('/project', {
             templateUrl: Config.TEMPLATE_URL + 'partials/project-list.html',
@@ -113,15 +121,38 @@ angular.module("Organizer").controller("TagListController", ["$scope", "$routePa
                 $scope.tags = _.without($scope.tags, tag);
             })
         }
+
+        $scope.redirect_to_tasks = function (tag) {
+            $location.path("/tasks/" + tag.id)
+        }
+
+        $scope.redirect_to_form = function (tag) {
+            if (tag) {
+                $location.path("/tags/" + tag.id + "/update");
+            } else {
+                $location.path("/tags/create");
+            }
+        }
     }]);
 
 angular.module("Organizer").controller("TaskListController", ["$scope", "$routeParams", "$location", "Task", "Tag",
     function TaskListController($scope, $routeParams, $location, Task, Tag) {
         $scope.new_task = {};
+        $scope.single_tag = $routeParams.tag || null;
+
+        if ($scope.single_tag) {
+            Tag.get({"id": $scope.single_tag}).$promise.then(function (response) {
+                console.log(response);
+                $scope.search_tags.push(response)
+            });
+        }
 
         $scope.tasks = Task.query();
         $scope.tags = Tag.query();
         $scope.search_tags = [];
+        if ($scope.single_tag) {
+            $scope.search_tags.push()
+        }
         $scope.task_errors = {};
         $scope.show_completed = false;
 
@@ -361,3 +392,20 @@ angular.module("Organizer").controller("ProjectDetailController", ["$scope", "$r
 
     }]);
 
+
+angular.module("Organizer").controller("TagFormController", ["$scope", "$routeParams", "$location", "Task", "Tag",
+    function TagFormController($scope, $routeParams, $location, Task, Tag) {
+        $scope.tag_id = $routeParams.id || null;
+        console.log($scope.tag_id)
+        if ($scope.tag_id) {
+            $scope.tag = Tag.get({id: $scope.tag_id});
+        }
+
+        $scope.save_tag = function(tag) {
+            if ($scope.tag.id) {
+                $scope.tag.$update()
+            } else {
+                $scope.tag = Tag.save($scope.tag)
+            }
+        }
+    }]);

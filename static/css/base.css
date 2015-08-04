@@ -69,3 +69,11 @@ tags-input .tags .tag-item {
 .yellow {
     color: goldenrod;
 }
+
+a[ng-click]{
+    cursor: pointer;
+}
+
+a[ng-click]:hover{
+    text-decoration: none;
+}

@@ -13,10 +13,10 @@
              ng-mouseleave="tag_class  = 'task-normal'">
             <div class = "col-md-10">
                 <div style="height: 30px;">
-                    <span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]"
+                    <a ng-click="redirect_to_tasks(tag)"><span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]"
                           class = "label label-default">
                         [[ tag.name ]]
-                    </span>
+                    </span></a><br><small>[[ tag.description ]]</small>
                 </div>
             </div>
             <div class = "col-md-1">
@@ -24,6 +24,7 @@
             </div>
             <div class = "col-md-1">
                 <div class = "btn-group btn-group-xs pull-right">
+                    <a class = "btn btn-default" ng-click="redirect_to_form(tag);"><div class = "glyphicon glyphicon-edit"></div></a>
                     <a class = "btn btn-default" ng-click="remove_tag(tag);"><div class = "glyphicon glyphicon-trash"></div></a>
                 </div>
             </div>
