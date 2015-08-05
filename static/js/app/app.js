@@ -32,7 +32,7 @@ angular.module("Organizer").config(["$routeProvider", function ($routeProvider) 
             templateUrl: Config.TEMPLATE_URL + 'partials/task-list.html',
             controller: 'TaskListController'
         }).
-        when('/task/:id', {
+        when('/tasks/:id', {
             templateUrl: Config.TEMPLATE_URL + 'partials/task-detail.html',
             controller: 'TaskDetailController'
         }).
@@ -102,7 +102,7 @@ angular.module('Organizer').factory('Project', ['$resource', function Project($r
 angular.module("Organizer").controller("MainNavigation", ["$scope", "$location",
     function MainNavigation($scope, $location) {
         $scope.menuClass = function (page) {
-            var current = $location.path().substring(1);
+            var current = $location.path().substring(1).split("/")[0];
             return page === current ? "active" : "";
         }
     }]);
@@ -238,7 +238,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
         };
 
         $scope.redirect_to = function redirect_to(task) {
-            $location.path('task/' + task.id);
+            $location.path('tasks/' + task.id);
         };
 
         $scope.toggle_completed = function toggle_completed(task) {
