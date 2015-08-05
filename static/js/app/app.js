@@ -41,7 +41,7 @@ angular.module("Organizer").config(["$routeProvider", function ($routeProvider) 
             controller: 'TagListController'
         }).
         when('/tags/create', {
-            templateUrl: Config.TEMPLATE_URL + 'partials/tag-from.html',
+            templateUrl: Config.TEMPLATE_URL + 'partials/tag-form.html',
             controller: 'TagFormController'
         }).
         when('/tags/:id/update', {
@@ -63,7 +63,7 @@ angular.module("Organizer").config(["$routeProvider", function ($routeProvider) 
 
 angular.module("Organizer").config(['msdElasticConfig', function(msdElasticConfig) {
     msdElasticConfig.append = "\n\n";
-}])
+}]);
 
 angular.module('Organizer').factory('_', ['$window',
     function($window) {
@@ -99,6 +99,14 @@ angular.module('Organizer').factory('Project', ['$resource', function Project($r
         })
 }]);
 
+angular.module("Organizer").controller("MainNavigation", ["$scope", "$location",
+    function MainNavigation($scope, $location) {
+        $scope.menuClass = function (page) {
+            var current = $location.path().substring(1);
+            return page === current ? "active" : "";
+        }
+    }]);
+
 angular.module("Organizer").controller("TagListController", ["$scope", "$routeParams", "$location", "Tag",
     function TagListController($scope, $routeParams, $location, Tag) {
         $scope.tags = Tag.query();
@@ -120,11 +128,11 @@ angular.module("Organizer").controller("TagListController", ["$scope", "$routePa
             Tag.remove(tag, function (data) {
                 $scope.tags = _.without($scope.tags, tag);
             })
-        }
+        };
 
         $scope.redirect_to_tasks = function (tag) {
             $location.path("/tasks/" + tag.id)
-        }
+        };
 
         $scope.redirect_to_form = function (tag) {
             if (tag) {
@@ -132,7 +140,7 @@ angular.module("Organizer").controller("TagListController", ["$scope", "$routePa
             } else {
                 $location.path("/tags/create");
             }
-        }
+        };
     }]);
 
 angular.module("Organizer").controller("TaskListController", ["$scope", "$routeParams", "$location", "Task", "Tag",
@@ -142,7 +150,6 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
 
         if ($scope.single_tag) {
             Tag.get({"id": $scope.single_tag}).$promise.then(function (response) {
-                console.log(response);
                 $scope.search_tags.push(response)
             });
         }
@@ -396,16 +403,25 @@ angular.module("Organizer").controller("ProjectDetailController", ["$scope", "$r
 angular.module("Organizer").controller("TagFormController", ["$scope", "$routeParams", "$location", "Task", "Tag",
     function TagFormController($scope, $routeParams, $location, Task, Tag) {
         $scope.tag_id = $routeParams.id || null;
-        console.log($scope.tag_id)
         if ($scope.tag_id) {
             $scope.tag = Tag.get({id: $scope.tag_id});
         }
 
+        function error_handler(result) {
+            $scope.errors = result.data;
+        }
+
         $scope.save_tag = function(tag) {
             if ($scope.tag.id) {
-                $scope.tag.$update()
+                $scope.tag.$update().then(function () {
+                    $location.path("/tags")
+                }, error_handler);
             } else {
-                $scope.tag = Tag.save($scope.tag)
+                $scope.tag = Tag.save($scope.tag).$promise.then(function () {
+                    $location.path("/tags");
+                }, error_handler);
             }
+
+
         }
     }]);

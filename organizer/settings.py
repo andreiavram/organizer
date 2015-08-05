@@ -110,11 +110,11 @@ BOWER_INSTALLED_APPS = (
     'bootstrap#3.3.4',
     'angular-resource#1.3.15',
     'jquery#2.1.1',
-    'fontawesome#4.3.0',
     'angular-elastic',
     'ng-tags-input',
     'angular-nl2br',
-    'angular-sanitize',)
+    'angular-sanitize',
+    'angularjs-color-picker')
 
 
 STATICFILES_DIRS = (

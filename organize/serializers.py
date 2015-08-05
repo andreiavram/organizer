@@ -20,10 +20,14 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ("id", "slug", "name", "description", "color", "count")
 
+    slug = serializers.SerializerMethodField()
     count = serializers.SerializerMethodField()
 
     def get_count(self, obj):
         return obj.tasks.count()
+
+    def get_slug(self, obj):
+        return obj.slug
 
 
 class ProjectSerializer(serializers.ModelSerializer):

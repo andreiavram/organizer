@@ -10,24 +10,26 @@
         </div>
     </div>
 
-    <form ng-submit="save_tag(tag)" action = "" method="post">
-    <div class = "row">
+    <p ng-repeat="(name, errs) in errors" class="alert alert-danger"><strong>[[ name ]]</strong>: [[ errs.join(', ') ]]</p>
+
+    <form class = "form-horizontal" ng-submit="save_tag(tag)">
+        <div class="form-group">
             <div class = "col-md-12">
                 <input class = "form-control" type="text" ng-model="tag.name" placeholder="name">
             </div>
-    </div>
-        <div class = "row" style="margin-top: 10px;">
+        </div>
+        <div class="form-group">
             <div class = "col-md-12">
                 <textarea class = "form-control" ng-model="tag.description" placeholder="description"></textarea>
             </div>
         </div>
-        <div class = "row" style="margin-top: 10px;">
+        <div class="form-group">
             <div class = "col-md-12">
                 <color-picker ng-model="tag.color"  color-picker-format="'hex'"></color-picker>
             </div>
         </div>
-        <div class = "row" style="margin-top: 10px;">
-            <div class = "col-md-ang12">
+        <div class="form-group">
+            <div class = "col-md-12">
                 <div class="pull-right"><button type="submit" class="btn btn-primary">Save</button></div>
             </div>
         </div>
