@@ -32,6 +32,10 @@ angular.module("Organizer").config(["$routeProvider", function ($routeProvider) 
             templateUrl: Config.TEMPLATE_URL + 'partials/task-list.html',
             controller: 'TaskListController'
         }).
+        when('/tasks/tag/:tag?', {
+            templateUrl: Config.TEMPLATE_URL + 'partials/task-list.html',
+            controller: 'TaskListController'
+        }).
         when('/tasks/:id', {
             templateUrl: Config.TEMPLATE_URL + 'partials/task-detail.html',
             controller: 'TaskDetailController'
@@ -135,7 +139,7 @@ angular.module("Organizer").controller("TagListController", ["$scope", "$routePa
         };
 
         $scope.redirect_to_tasks = function (tag) {
-            $location.path("/tasks/" + tag.id)
+            $location.path("/tasks/tag/" + tag.id)
         };
 
         $scope.redirect_to_form = function (tag) {
