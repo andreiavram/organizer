@@ -99,6 +99,21 @@ angular.module('Organizer').factory('Project', ['$resource', function Project($r
         })
 }]);
 
+angular.module("Organizer").factory("LuminanceCalculator", [function LuminanceCalculator() {
+    return function (color) {
+        color = color || "#000000";
+        var number_color = parseInt(color.slice(1), 16);
+        var r = (number_color & 0xff0000) >> 16;
+        var g = (number_color & 0xff00) >> 8;
+        var b = (number_color & 0xff);
+        if ((r * 0.299 + g * 0.587 + b * 0.114) / 256. < 0.5) {
+            return "#FFFFFF";
+        } else {
+            return "#000000";
+        };
+    };
+}]);
+
 angular.module("Organizer").controller("MainNavigation", ["$scope", "$location",
     function MainNavigation($scope, $location) {
         $scope.menuClass = function (page) {
@@ -107,22 +122,11 @@ angular.module("Organizer").controller("MainNavigation", ["$scope", "$location",
         }
     }]);
 
-angular.module("Organizer").controller("TagListController", ["$scope", "$routeParams", "$location", "Tag",
-    function TagListController($scope, $routeParams, $location, Tag) {
+angular.module("Organizer").controller("TagListController", ["$scope", "$routeParams", "$location", "Tag", "LuminanceCalculator",
+    function TagListController($scope, $routeParams, $location, Tag, LuminanceCalculator) {
         $scope.tags = Tag.query();
 
-        $scope.calculate_luminance = function (color) {
-            color = color || "#000000";
-            var number_color = parseInt(color.slice(1), 16);
-            var r = (number_color & 0xff0000) >> 16;
-            var g = (number_color & 0xff00) >> 8;
-            var b = (number_color & 0xff);
-            if ((r * 0.299 + g * 0.587 + b * 0.114) / 256. < 0.5) {
-                return "#FFFFFF";
-            } else {
-                return "#000000";
-            };
-        };
+        $scope.calculate_luminance = LuminanceCalculator;
 
         $scope.remove_tag = function (tag) {
             Tag.remove(tag, function (data) {
@@ -143,8 +147,8 @@ angular.module("Organizer").controller("TagListController", ["$scope", "$routePa
         };
     }]);
 
-angular.module("Organizer").controller("TaskListController", ["$scope", "$routeParams", "$location", "Task", "Tag",
-    function TaskListController($scope, $routeParams, $location, Task, Tag) {
+angular.module("Organizer").controller("TaskListController", ["$scope", "$routeParams", "$location", "Task", "Tag", "LuminanceCalculator",
+    function TaskListController($scope, $routeParams, $location, Task, Tag, LuminanceCalculator) {
         $scope.new_task = {};
         $scope.single_tag = $routeParams.tag || null;
 
@@ -252,18 +256,7 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
             });
         };
 
-        $scope.calculate_luminance = function (color) {
-            color = color || "#000000";
-            var number_color = parseInt(color.slice(1), 16);
-            var r = (number_color & 0xff0000) >> 16;
-            var g = (number_color & 0xff00) >> 8;
-            var b = (number_color & 0xff);
-            if ((r * 0.299 + g * 0.587 + b * 0.114) / 256. < 0.5) {
-                return "#FFFFFF";
-            } else {
-                return "#000000";
-            };
-        };
+        $scope.calculate_luminance = LuminanceCalculator;
 
         $scope.remove_tag_from_search = function (tag) {
             var tag_ids = _.pluck($scope.search_tags, "id");
@@ -280,8 +273,8 @@ angular.module("Organizer").controller("TaskListController", ["$scope", "$routeP
         }
     }]);
 
-angular.module("Organizer").controller("TaskDetailController", ["$scope", "$routeParams", "$location", "$filter", "Task", "Tag",
-    function TaskDetailController($scope, $routeParams, $location, $filter, Task, Tag) {
+angular.module("Organizer").controller("TaskDetailController", ["$scope", "$routeParams", "$location", "$filter", "Task", "Tag", "LuminanceCalculator",
+    function TaskDetailController($scope, $routeParams, $location, $filter, Task, Tag, LuminanceCalculator) {
         $scope.mode = 'view';
         $scope.task_id = $routeParams.id;
 
@@ -301,18 +294,7 @@ angular.module("Organizer").controller("TaskDetailController", ["$scope", "$rout
             $scope.process_task_from_server()
         });
 
-        $scope.calculate_luminance = function (color) {
-            color = color || "#000000";
-            var number_color = parseInt(color.slice(1), 16);
-            var r = (number_color & 0xff0000) >> 16;
-            var g = (number_color & 0xff00) >> 8;
-            var b = (number_color & 0xff);
-            if ((r * 0.299 + g * 0.587 + b * 0.114) / 256. < 0.5) {
-                return "#FFFFFF";
-            } else {
-                return "#000000";
-            };
-        };
+        $scope.calculate_luminance = LuminanceCalculator;
 
         $scope.task_errors = {};
 
