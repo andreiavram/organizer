@@ -28,7 +28,7 @@ angular.module("Organizer").filter('parseUrlFilter', function () {
 
 angular.module("Organizer").config(["$routeProvider", function ($routeProvider) {
     $routeProvider.
-        when('/tasks/:tag?', {
+        when('/tasks', {
             templateUrl: Config.TEMPLATE_URL + 'partials/task-list.html',
             controller: 'TaskListController'
         }).
