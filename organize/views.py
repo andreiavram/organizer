@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
-from organize.models import TaskItem, Tag, Project
+from organize.models import TaskItem, Tag, Project, TaskComment
 from rest_framework import viewsets, permissions
-from organize.serializers import TaskSerializer, TagSerializer, ProjectSerializer
+from organize.serializers import TaskSerializer, TagSerializer, ProjectSerializer, TaskCommentSerializer
 
 
 class MainAppView(TemplateView):
@@ -67,4 +67,10 @@ class TagViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = (permissions.IsAuthenticated, )
+
+
+class TaskCommentViewSet(viewsets.ModelViewSet):
+    queryset = TaskComment.objects.all()
+    serializer_class = TaskCommentSerializer
     permission_classes = (permissions.IsAuthenticated, )

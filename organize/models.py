@@ -92,3 +92,13 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class TaskComment(models.Model):
+    user = models.ForeignKey("auth.User", )
+    timestamp = models.DateTimeField(auto_now=True)
+    description = models.TextField(null=True, blank=True)
+    task = models.ForeignKey(TaskItem)
+
+    def __unicode__(self):
+        return self.description

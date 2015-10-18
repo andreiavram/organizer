@@ -1,0 +1,26 @@
+<div class="base">
+    <div class = "page-header">
+        <div class = "row">
+            <div class = "col-md-12">
+                <h1>Projects <small>get things done!</small></h1>
+            </div>
+        </div>
+
+    </div>
+
+    <div class = "task_list">
+        <div class = "row" ng-repeat="project in projects"  ng-init = "project_class = 'project-normal'" ng-class="project_class"
+             ng-mouseenter="project_class = 'project-hover'"
+             ng-mouseleave="project_class = 'project-normal'">
+            <div class = "col-md-11" ng-click="redirect_to(project)">
+                <div ng-bind="project.title"></div>
+                <div class = "project-list-description" ng-cloak ng-show="project.description.length > 0"><small>[[ project.description | limitTo:200 ]]</small></div>
+            </div>
+            <div class = "col-md-1">
+                <div class = "btn-group btn-group-xs pull-right">
+                    <a class = "btn btn-default" ng-click="remove_task(task);"><div class = "glyphicon glyphicon-trash"></div></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
