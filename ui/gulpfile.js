@@ -1,72 +1,108 @@
-// gulp
 var gulp = require('gulp');
-
-// plugins
-var connect = require('gulp-connect');
+var browserSync = require('browser-sync');
+var less = require('gulp-less');
+var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
-var uglify = require('gulp-uglify');
-var minifyCSS = require('gulp-minify-css');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var sourcemaps = require('gulp-sourcemaps');
+var copy = require('gulp-copy');
+var ignore = require('gulp-ignore');
 var clean = require('gulp-clean');
+var uglify = require('gulp-uglify');
+var minifyCss = require('gulp-minify-css');
 
-// tasks
-gulp.task('lint', function() {
-    gulp.src(['./app/**/*.js', '!./app/bower_components/**'])
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'))
-        .pipe(jshint.reporter('fail'));
+var BOWER_PATH = './bower_components/';
+var APP_PATH = './public/';
+var BUILD_PATH = './static/'
+
+gulp.task('server', function() {
+    browserSync({
+        server: {
+            baseDir: APP_PATH
+        },
+        open: false,
+        host: '127.0.0.1'
+    });
 });
 
-gulp.task('clean', function() {
-    gulp.src('./dist/*')
+gulp.task('less', function() {
+    return gulp.src(APP_PATH + 'modules/**/*.less')
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(less())
+        .pipe(sourcemaps.write())
+        .pipe(concat('bundle.css'))
+        .pipe(gulp.dest(APP_PATH + 'static/css/'));
+});
+
+gulp.task('js', function() {
+    return browserify(APP_PATH + 'main.js', {
+            paths: ['./node_modules', './public/modules'],
+            debug: true
+        })
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(APP_PATH + 'static/js/'));
+});
+
+gulp.task('copy-assets', function() {
+  return gulp.src(APP_PATH + 'modules/**/assets/**/*')
+                .pipe(ignore.exclude('**/*.less'))
+                .pipe(copy(APP_PATH + 'static/', {prefix: 4}));
+});
+
+gulp.task('less-no-sm', function() {
+    return gulp.src(APP_PATH + 'modules/**/*.less')
+        .pipe(less())
+        .pipe(concat('bundle.css'))
+        .pipe(minifyCss({}))
+        .pipe(gulp.dest(APP_PATH + 'static/css/'));
+});
+
+gulp.task('js-no-sm', function() {
+    return browserify(APP_PATH + 'main.js', {
+            paths: ['./node_modules', './public/modules'],
+            debug: true
+        })
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(buffer())
+        .pipe(uglify({mangle: false}))
+        .pipe(gulp.dest(APP_PATH + 'static/js/'));
+});
+
+gulp.task('clean-build', function(cb) {
+    return gulp.src(BUILD_PATH, {read: false})
         .pipe(clean({force: true}));
 });
 
-gulp.task('minify-css', function() {
-    var opts = {comments:true,spare:true};
-    gulp.src(['./app/**/*.css', '!./app/bower_components/**'])
-        .pipe(minifyCSS(opts))
-        .pipe(gulp.dest('./dist/'))
+gulp.task('copy-build', ['clean-build'], function() {
+    return gulp.src(APP_PATH + 'static/**/*')
+        .pipe(copy(BUILD_PATH, {prefix: 2}));
 });
 
-gulp.task('minify-js', function() {
-    gulp.src(['./app/**/*.js', '!./app/bower_components/**'])
-        .pipe(uglify({
-            // inSourceMap:
-            // outSourceMap: "app.js.map"
-        }))
-        .pipe(gulp.dest('./dist/'))
+gulp.task('copy-bower', function() {
+    return gulp.src(BOWER_PATH + '/*/dist/**/*')
+        .pipe(copy(APP_PATH + 'static/libs', {prefix: 1}));
 });
 
-gulp.task('copy-bower-components', function () {
-    gulp.src('./app/bower_components/**')
-        .pipe(gulp.dest('dist/bower_components'));
+gulp.task('lint', function() {
+    return gulp.src(APP_PATH + 'modules/**/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
 
-gulp.task('copy-html-files', function () {
-    gulp.src('./app/**/*.html')
-        .pipe(gulp.dest('dist/'));
+gulp.task('setup', ['copy-bower', 'copy-assets']);
+
+gulp.task('serve', ['setup', 'lint', 'less', 'js', 'server'], function() {
+    return gulp.watch(
+        [APP_PATH + 'modules/**/*.*', APP_PATH + 'main.js', APP_PATH + 'config.js', APP_PATH + 'index.html'],
+        ['copy-assets', 'lint', 'less', 'js', browserSync.reload]);
 });
 
-gulp.task('connect', function () {
-    connect.server({
-        root: 'app/',
-        port: 8888
-    });
-});
-
-gulp.task('connectDist', function () {
-    connect.server({
-        root: 'dist/',
-        port: 9999
-    });
-});
-
-
-// default task
-gulp.task('default',
-    ['lint', 'connect']
-);
-// build task
-gulp.task('build',
-    ['lint', 'minify-css', 'minify-js', 'copy-html-files', 'copy-bower-components', 'connectDist']
-);
+gulp.task('build', ['setup', 'lint', 'less', 'js', 'copy-build']);
+gulp.task('build-debug', ['setup', 'lint', 'less-no-sm', 'js-no-sm', 'copy-build']);

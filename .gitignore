@@ -8,3 +8,5 @@ organizer/local_settings*
 ui/node_modules*
 ui/app/bower_components*
 ui/dist*
+ui/bower_components*
+ui/public/static*

@@ -1,28 +1,12 @@
 {
-  "name": "organizer",
-  "description": "organizer ui",
-  "main": "gulpfile.js",
+  "name": "AngularJS-Boilerplate",
+  "version": "1.0",
   "authors": [
-    "Andrei Avram"
+    "Sergiu Paraschiv <sergiu.paraschiv@spyhce.com>"
   ],
-  "license": "ISC",
-  "homepage": "https://github.com/andreiavram/organizer",
-  "moduleType": [],
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+  "license": "none",
   "dependencies": {
-    "angular": "~1.4.7",
-    "angular-animate": "~1.4.7",
-    "angular-route": "~1.4.7",
-    "jquery": "~2.1.4",
-    "animate.css": "~3.4.0",
-    "bootstrap": "~3.3.5",
-    "font-awesome": "fontawesome#~4.4.0"
+    "bootstrap": "~3.3.4",
+    "jquery": "~2.1.4"
   }
 }
