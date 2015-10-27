@@ -1,6 +1,7 @@
 var ng = require('angular');
 
 var Router = require('base/Router');
+var NavigationController = require("navigation/controllers/NavigationController");
 
 function initialize() {
     "use strict";
@@ -8,7 +9,13 @@ function initialize() {
     Router.addState({
         name: 'base',
         abstract: true,
-        views: {}
+        views: {
+            "navigation@": {
+                templateUrl: '/static/navigation/templates/top-navigation.html',
+                controller: NavigationController
+                // controllerAs: 'demo'
+            }
+        }
     });
 }
 
