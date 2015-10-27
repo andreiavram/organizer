@@ -7,6 +7,8 @@ var _ = require('lodash');
 var Config = require('base/Config');
 var Promise = require('base/Promise');
 
+var Tasks = require('tasks/Tasks');
+
 function Task($resource) {
     return $resource(Config.URL_PREFIX + '/api/task/:id/', { id: '@id'},
         {
@@ -16,9 +18,8 @@ function Task($resource) {
         });
 }
 
-angular.module('Organizer').factory('Task', [
+Tasks.factory('Task', [
     '$resource',
-
     Task
 ]);
 

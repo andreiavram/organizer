@@ -1,37 +1,37 @@
-var _ = require('lodash');
+/**
+ * Created by yeti on 23.10.2015.
+ */
 
-var Auth = require('auth/Auth');
-var AuthService = require('auth/services/AuthService');
-var State = require('base/State');
+var Auth = require("auth/Auth");
+var AUTH_EVENTS = require("auth/constants/auth_events");
+// var AuthService = require("auth/services/AuthService");
 
-function LoginController($scope) {
-    var self = this;
-    
-    this.credentials = {
+function LoginController($scope, $rootScope, AuthService) {
+    "use strict";
+
+    console.log("login controller");
+
+    $scope.credentials = {
         username: '',
         password: ''
     };
-    this.failed = false;
-    this.login = login;
 
-    function login(form, e) {
-        e.preventDefault();
-        
-        self.failed = false;
-        AuthService.login(self.credentials)
-            .then(function(token) {
-                State.go('base.dash.taxonomy');
-            })
-            .catch(function(error) {
-                self.failed = true;
-            });
-    }
+    $scope.login = function (credentials) {
+        AuthService.login(credentials).then(function (user) {
+            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+            $scope.setCurrentUser(user);
+        }, function () {
+            $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+        });
+    };
 }
 
-Auth.controller('LoginController', [
-    '$scope',
-    '$state',
-    
+
+Auth.controller("LoginController", [
+    "$scope",
+    "$rootScope",
+    "AuthService",
+
     LoginController
 ]);
 

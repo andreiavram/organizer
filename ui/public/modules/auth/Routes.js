@@ -1,9 +1,10 @@
 var ng = require('angular');
 
-var Router = require('base/Router');
 var LoginController = require('auth/controllers/LoginController');
+var Router = require('base/Router');
 
 function initialize() {
+    "use strict";
     Router.addState({
         name: 'base.auth',
         abstract: true,
@@ -13,10 +14,10 @@ function initialize() {
     Router.addState({
         name: 'base.auth.login',
         url: '/login',
-        isDefault: true,
+        isDefault: false,
         views: {
-            'demo@': {
-                templateUrl: '/static/auth/templates/login.html',
+            'main@': {
+                templateUrl: '/static/auth/templates/loginForm.html',
                 controller: LoginController,
                 controllerAs: 'auth'
             }

@@ -3,6 +3,7 @@ var ng = require('angular');
 var Router = require('base/Router');
 var TaskListController = require('tasks/controllers/TaskListController');
 var TaskDetailController = require('tasks/controllers/TaskDetailController');
+var AuthResolver = require("auth/services/AuthResolver");
 
 function initialize() {
     Router.addState({
@@ -16,11 +17,17 @@ function initialize() {
         url: '/tasks',
         isDefault: true,
         views: {
-            'tasks@': {
+            'main@': {
                 templateUrl: '/static/tasks/templates/task-list.html',
                 controller: TaskListController
                 // controllerAs: 'demo'
             }
+        },
+        resolve: {
+            //auth: function resolveAuthentication(AuthResolver) {
+            //    "use strict";
+            //    return AuthResolver.resolve();
+            //}
         }
     });
 
@@ -34,7 +41,7 @@ function initialize() {
                 controller: TaskDetailController
             }
         }
-    })
+    });
 }
 
 module.exports = initialize;

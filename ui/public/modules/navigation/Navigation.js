@@ -1,11 +1,11 @@
 /**
- * Created by yeti on 20.10.2015.
+ * Created by yeti on 27.10.2015.
  */
+
 var ng = require('angular');
-var Resource = require('angular-resource');
 var OrganizerSetup = require("base/Setup");
 
-var Tasks = ng.module('Tasks', [Resource, ])
+var Navigation = ng.module('Navigation', [])
     .config([
         '$interpolateProvider',
         '$resourceProvider',
@@ -14,5 +14,4 @@ var Tasks = ng.module('Tasks', [Resource, ])
         OrganizerSetup
     ]);
 
-
-module.exports = Tasks;
+module.exports = Navigation;

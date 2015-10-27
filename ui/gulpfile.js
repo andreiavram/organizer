@@ -12,6 +12,9 @@ var ignore = require('gulp-ignore');
 var clean = require('gulp-clean');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
+var gulpFilter = require('gulp-filter');
+var mainBowerFiles = require('main-bower-files');
+var rename = require('gulp-rename')
 
 var BOWER_PATH = './bower_components/';
 var APP_PATH = './public/';
@@ -34,6 +37,25 @@ gulp.task('less', function() {
         .pipe(sourcemaps.write())
         .pipe(concat('bundle.css'))
         .pipe(gulp.dest(APP_PATH + 'static/css/'));
+});
+
+gulp.task('css', function() {
+    "use strict";
+    var cssFilter = gulpFilter(['**/*.css', '**/*.less'], {restore: true});
+    return gulp.src(mainBowerFiles(), { "base": BOWER_PATH })
+        .pipe(cssFilter)
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(less())
+        .pipe(sourcemaps.write())
+        .pipe(concat('vendor.css'))
+        .pipe(gulp.dest(APP_PATH + "static/css/"));
+});
+
+gulp.task('fonts', function() {
+    "use strict";
+    return gulp.src([BOWER_PATH + '**/fonts/*'])
+        .pipe(rename({dirname: ''}))
+        .pipe(gulp.dest(APP_PATH + "static/fonts/"));
 });
 
 gulp.task('js', function() {
@@ -98,11 +120,11 @@ gulp.task('lint', function() {
 
 gulp.task('setup', ['copy-bower', 'copy-assets']);
 
-gulp.task('serve', ['setup', 'lint', 'less', 'js', 'server'], function() {
+gulp.task('serve', ['setup', 'lint', 'less', 'css', 'fonts', 'js', 'server'], function() {
     return gulp.watch(
         [APP_PATH + 'modules/**/*.*', APP_PATH + 'main.js', APP_PATH + 'config.js', APP_PATH + 'index.html'],
         ['copy-assets', 'lint', 'less', 'js', browserSync.reload]);
 });
 
-gulp.task('build', ['setup', 'lint', 'less', 'js', 'copy-build']);
-gulp.task('build-debug', ['setup', 'lint', 'less-no-sm', 'js-no-sm', 'copy-build']);
+gulp.task('build', ['setup', 'lint', 'less', 'css', 'fonts', 'js', 'copy-build']);
+gulp.task('build-debug', ['setup', 'lint', 'less-no-sm', 'css', 'fonts', 'js-no-sm', 'copy-build']);

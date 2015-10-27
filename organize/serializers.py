@@ -1,3 +1,5 @@
+from rest_auth.serializers import TokenSerializer
+from rest_framework.authtoken.models import Token
 from organize.models import TaskItem, Tag, Project, TaskComment
 from rest_framework import serializers
 
@@ -44,4 +46,19 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     tasks = TaskSerializer(many=True, read_only=True)
 
+
+class UserTokenSerializer(TokenSerializer):
+    class Meta:
+        model = Token
+        fields = ('key', 'user', 'role')
+
+    user = serializers.SerializerMethodField("user_username")
+    role = serializers.SerializerMethodField("user_role")
+
+    def user_username(self, obj):
+        return obj.user.username
+
+    def user_role(self, obj):
+        #   TODO: implement roles
+        return "admin"
 

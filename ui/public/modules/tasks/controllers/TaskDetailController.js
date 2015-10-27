@@ -6,15 +6,18 @@ var _ = require('lodash');
 
 var State = require('base/State');
 var Tasks = require('tasks/Tasks');
+var Tag = require('tags/factories/Tag');
+var LuminanceCalculator = require("tags/factories/LuminanceCalculator");
 
-function TaskDetailController($scope, $routeParams, $location, $filter, LuminanceCalculator) {
+function TaskDetailController($scope, $stateParams, $location, $filter) {
+    "use strict";
     $scope.mode = 'view';
-    $scope.task_id = $routeParams.id;
+    $scope.task_id = $stateParams.id;
 
     $scope.process_task_from_server = function () {
         $scope.load_tags().then(function (tags) {
-            $scope.task.tags = _.filter(tags, function (e) { return _.indexOf($scope.task.tags, e.id) >= 0 });
-            $scope.tags = $scope.task.tags
+            $scope.task.tags = _.filter(tags, function (e) { return _.indexOf($scope.task.tags, e.id) >= 0; });
+            $scope.tags = $scope.task.tags;
         });
     };
 
@@ -24,7 +27,7 @@ function TaskDetailController($scope, $routeParams, $location, $filter, Luminanc
 
     $scope.task = Task.get({id: $scope.task_id});
     $scope.task.$promise.then(function(data){
-        $scope.process_task_from_server()
+        $scope.process_task_from_server();
     });
 
     $scope.calculate_luminance = LuminanceCalculator;
@@ -34,21 +37,21 @@ function TaskDetailController($scope, $routeParams, $location, $filter, Luminanc
     $scope.remove_task = function remove_task() {
         $scope.task.$delete().then(function () {
             $location.path('tasks/');
-        })
+        });
     };
 
     $scope.toggle_mode = function toggle_mode() {
-        if ($scope.mode == 'view') {
+        if ($scope.mode === 'view') {
             $scope.mode = 'edit';
         } else {
             $scope.update_task(function () {
                 $scope.mode = 'view';
-            })
+            });
         }
     };
 
     $scope.load_tags = function load_tags(query) {
-        return Tag.query({slug: query}).$promise
+        return Tag.query({slug: query}).$promise;
     };
 
     $scope.toggle_completed = function toggle_completed() {
@@ -70,7 +73,7 @@ function TaskDetailController($scope, $routeParams, $location, $filter, Luminanc
         return {
             1: "fa-arrow-circle-down yellow",
             4: "fa-arrow-circle-up red", 2: "fa-bars green"
-        }[$scope.task.priority]
+        }[$scope.task.priority];
     };
 
     $scope._toggle_priority = function () {
@@ -79,7 +82,7 @@ function TaskDetailController($scope, $routeParams, $location, $filter, Luminanc
             $scope.task.priority = 1;
         }
 
-        $scope.update_task()
+        $scope.update_task();
     };
 
     $scope.toggle_priority = _.debounce($scope._toggle_priority, 500);
@@ -89,10 +92,9 @@ function TaskDetailController($scope, $routeParams, $location, $filter, Luminanc
 
 Tasks.controller("TaskDetailController", [
     "$scope",
-    "$routeParams",
+    "$stateParams",
     "$location",
     "$filter",
-    "LuminanceCalculator",
 
     TaskDetailController
 ]);

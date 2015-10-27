@@ -8,15 +8,18 @@ var State = require('base/State');
 var Tasks = require('tasks/Tasks');
 
 var Task = require('tasks/factories/Task');
-var Tag = require('tasks/factories/Tag');
+var Tag = require('tags/factories/Tag');
 
-function TaskListController($scope, $routeParams, $location, Task, Tag, LuminanceCalculator) {
+var LuminanceCalculator = require("tags/factories/LuminanceCalculator");
+
+function TaskListController($scope, $stateParams, $location, Task, Tag) {
+    "use strict";
     $scope.new_task = {};
-    $scope.single_tag = $routeParams.tag || null;
+    $scope.single_tag = $stateParams.tag || null;
 
     if ($scope.single_tag) {
         Tag.get({"id": $scope.single_tag}).$promise.then(function (response) {
-            $scope.search_tags.push(response)
+            $scope.search_tags.push(response);
         });
     }
 
@@ -24,7 +27,7 @@ function TaskListController($scope, $routeParams, $location, Task, Tag, Luminanc
     $scope.tags = Tag.query();
     $scope.search_tags = [];
     if ($scope.single_tag) {
-        $scope.search_tags.push()
+        $scope.search_tags.push();
     }
     $scope.task_errors = {};
     $scope.show_completed = false;
@@ -57,13 +60,13 @@ function TaskListController($scope, $routeParams, $location, Task, Tag, Luminanc
 
     $scope.process_task = function process_task(e) {
         e.preventDefault();
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             var re_tags = /@tags\(([\w+\-, ]+)\)/i;
             var res = $scope.new_task.title.match(re_tags);
             if (res) {
-                var tag_list = _.map(res[1].split(","), function(e) { return e.trim() });
+                var tag_list = _.map(res[1].split(","), function(e) { return e.trim(); });
                 $scope.new_task.tags = _.pluck(_.filter($scope.tags, function (e) {
-                    return _.indexOf(tag_list, e.slug) >= 0
+                    return _.indexOf(tag_list, e.slug) >= 0;
                 }), "id");
 
                 $scope.new_task.title = $scope.new_task.title.replace(res[0], "");
@@ -74,7 +77,7 @@ function TaskListController($scope, $routeParams, $location, Task, Tag, Luminanc
                 $scope.refresh_tasks();
                 $scope.new_task = {};
             }, function (data) {
-                $scope.task_errors = data.data
+                $scope.task_errors = data.data;
             });
         }
 
@@ -93,14 +96,14 @@ function TaskListController($scope, $routeParams, $location, Task, Tag, Luminanc
             "inprogress": "fa-cogs",
             "blocked": "fa-exclamation-triangle",
             "givenup": "fa-trash-o"
-        }[task.status]
+        }[task.status];
     };
 
     $scope.task_priority_icon = function task_priority_icon(task) {
         return {
             1: "fa-arrow-circle-down yellow",
             4: "fa-arrow-circle-up red", 2: ""
-        }[task.priority]
+        }[task.priority];
     };
 
     $scope.redirect_to = function redirect_to(task) {
@@ -132,16 +135,16 @@ function TaskListController($scope, $routeParams, $location, Task, Tag, Luminanc
         if (_.indexOf(tag_ids, tag.id) < 0) {
             $scope.search_tags.push(tag);
         }
-    }
+    };
 }
 
 Tasks.controller("TaskListController", [
     "$scope",
-    "$routeParams",
+    "$stateParams",
     "$location",
     "Task",
     "Tag",
-    "LuminanceCalculator",
+    LuminanceCalculator,
 
     TaskListController
 ]);

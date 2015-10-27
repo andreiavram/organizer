@@ -3,14 +3,16 @@
  */
 
 var Tags = require('tags/Tags');
+var Config = require('base/Config');
 
 function Tag($resource) {
+    "use strict";
     return $resource(Config.URL_PREFIX + '/api/tag/:id/', { id: '@id'},
         {
             update: {
                 method: 'PUT'
             }
-        })
+        });
 }
 
 Tags.factory('Tag', [

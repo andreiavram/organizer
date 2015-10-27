@@ -43,12 +43,17 @@ INSTALLED_APPS = (
     'djangobower',
     'crispy_forms',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+
+    'corsheaders',
 
     'goodies'
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -135,9 +140,22 @@ URL_PREFIX = ""
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + \
                               ('organizer.context_processors.url_prefix', )
 
+
+LOGIN_URL = "/admin/"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
+REST_AUTH_SERIALIZERS = {
+    "TOKEN_SERIALIZER": "organize.serializers.UserTokenSerializer",
+}
+
+
 try:
     from local_settings import *
 except ImportError:
     pass
 
-LOGIN_URL = "/admin/"
