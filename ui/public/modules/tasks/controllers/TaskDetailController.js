@@ -6,11 +6,16 @@ var _ = require('lodash');
 
 var State = require('base/State');
 var Tasks = require('tasks/Tasks');
-var Tag = require('tags/factories/Tag');
 var LuminanceCalculator = require("tags/factories/LuminanceCalculator");
 
-function TaskDetailController($scope, $stateParams, $location, $filter) {
+require("base/filters/UrlFilter");
+require('tags/factories/Tag');
+require('tasks/factories/Task');
+
+
+function TaskDetailController($scope, $stateParams, $location, $filter, Task, Tag) {
     "use strict";
+
     $scope.mode = 'view';
     $scope.task_id = $stateParams.id;
 
@@ -95,6 +100,8 @@ Tasks.controller("TaskDetailController", [
     "$stateParams",
     "$location",
     "$filter",
+    "Task",
+    "Tag",
 
     TaskDetailController
 ]);

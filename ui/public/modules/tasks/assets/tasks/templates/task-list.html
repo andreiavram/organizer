@@ -51,7 +51,7 @@
                 <div class = "glyphicon" ng-class="{'glyphicon-unchecked': !task.completed, 'glyphicon-check': task.completed}" ng-click="toggle_completed(task)"></div>
                 <i class = "fa" ng-class="task_priority_icon(task)"></i>
             </div>
-            <div class = "col-md-7" ng-click="redirect_to(task)">
+            <div class = "col-md-7" ui-sref="base.tasks.detail({ id: task.id })">
                 <div ng-bind="task.title" ng-class="{strikethrough: task.completed}"></div>
                 <div class = "task-list-description" ng-cloak ng-show="task.description.length > 0"><small>[[ task.description | limitTo:200 ]]</small></div>
             </div>

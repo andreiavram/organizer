@@ -1,25 +1,26 @@
 var ng = require('angular');
 
 var Router = require('base/Router');
-var TaskListController = require('tasks/controllers/TaskListController');
-var TaskDetailController = require('tasks/controllers/TaskDetailController');
 var AuthResolver = require("auth/services/AuthResolver");
+var TagListController = require("tags/controllers/TagListController");
+var TagFormController = require("tags/controllers/TagFormController");
 
 function initialize() {
+    "use strict";
     Router.addState({
-        name: 'base.tasks',
+        name: 'base.tags',
         abstract: true,
         views: {}
     });
 
     Router.addState({
-        name: 'base.tasks.list',
-        url: '/tasks',
+        name: 'base.tags.list',
+        url: '/tags',
         isDefault: true,
         views: {
             'main@': {
-                templateUrl: '/static/tasks/templates/task-list.html',
-                controller: TaskListController
+                templateUrl: '/static/tags/templates/tag-list.html',
+                controller: TagListController
                 // controllerAs: 'demo'
             }
         },
@@ -32,13 +33,13 @@ function initialize() {
     });
 
     Router.addState({
-        name: 'base.tasks.detail',
-        url: '/tasks/{id:int}/',
+        name: 'base.tags.detail',
+        url: '/tags/{id:int}/',
         isDefault: false,
         views: {
             'main@': {
-                templateUrl: '/static/tasks/templates/task-detail.html',
-                controller: TaskDetailController
+                templateUrl: '/static/tags/templates/tags-form.html',
+                controller: TagFormController
             }
         }
     });

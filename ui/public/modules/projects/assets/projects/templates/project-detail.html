@@ -1,0 +1,41 @@
+<div class="base">
+    <div class = "page-header">
+        <h1>
+            <div ng-show="mode == 'view'" ng-bind="project.title"></div>
+            <div ng-show="mode == 'edit'"><input class = "no-border full-width" type = "text" ng-model = "task.title"></div>
+        </h1>
+    </div>
+
+    <div class = "row">
+        <div class = "col-md-12">
+            <tags-input class = "no-border" ng-show="mode == 'edit'" ng-model="tags" display-property="name" key-property="id" add-from-autocomplete-only="true" placeholder="">
+                <auto-complete source="load_tags($query)"></auto-complete>
+            </tags-input>
+        </div>
+    </div>
+
+    <div class = "row">
+        <div class = "col-md-12">
+            <div ng-cloak ng-show="mode == 'view'" ng-bind-html="project.description | parseUrlFilter:'_blank'"></div>
+            <div ng-show="mode == 'edit'">
+                <textarea msd-elastic ng-model = "project.description" class = "no-border full-width">
+                </textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class = "row">
+        <ul>
+            <li ng-repeat="task in project.tasks">
+                [[ task ]]
+            </li>
+        </ul>
+    </div>
+    <div class = "row">
+        <input type = "text" ng-model = "new_task.title">
+        <input type="submit" ng-click="save_project_task()">
+    </div>
+
+</div>
+
+

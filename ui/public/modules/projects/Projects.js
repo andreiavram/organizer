@@ -3,13 +3,14 @@
  */
 var ng = require('angular');
 var Resource = require('angular-resource');
-var OrganizerSetup = require("base/Setup");
 var Sanitize = require('angular-sanitize');
+var OrganizerSetup = require("base/Setup");
 var TagsInput = require('ng-tags-input');
 var Nl2Br = require('nl2br');
 var ColorPicker = require("angular-color-picker");
 
-var Tags = ng.module('Tags', [Resource, Sanitize, TagsInput, Nl2Br, ColorPicker])
+
+var Projects = ng.module('Projects', [Resource, Sanitize, TagsInput, Nl2Br, ColorPicker])
     .config([
         '$interpolateProvider',
         '$resourceProvider',
@@ -19,4 +20,5 @@ var Tags = ng.module('Tags', [Resource, Sanitize, TagsInput, Nl2Br, ColorPicker]
         OrganizerSetup
     ]);
 
-module.exports = Tags;
+
+module.exports = Projects;

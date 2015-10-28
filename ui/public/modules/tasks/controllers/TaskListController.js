@@ -107,6 +107,7 @@ function TaskListController($scope, $stateParams, $location, Task, Tag) {
     };
 
     $scope.redirect_to = function redirect_to(task) {
+        console.log("getting into redirect_to for task", task);
         $location.path('tasks/' + task.id);
     };
 
