@@ -29,7 +29,7 @@
             </div>
             <div class = "col-md-1">
                 <div class = "btn-group btn-group-xs pull-right">
-                    <a class = "btn btn-default" ng-click="redirect_to_form(tag);"><div class = "glyphicon glyphicon-edit"></div></a>
+                    <a class = "btn btn-default" ui-sref="base.tags.detail({id: tag.id})"><div class = "glyphicon glyphicon-edit"></div></a>
                     <a class = "btn btn-default" ng-click="remove_tag(tag);"><div class = "glyphicon glyphicon-trash"></div></a>
                 </div>
             </div>

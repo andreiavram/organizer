@@ -8,8 +8,9 @@ function NavigationController($scope) {
     "use strict";
 
     $scope.menuClass = function (page) {
-        var current = $location.path().substring(1).split("/")[0];
-        return page === current ? "active" : "";
+        // var current = $location.path().substring(1).split("/")[0];
+        // return page === current ? "active" : "";
+        return "";
     };
 }
 

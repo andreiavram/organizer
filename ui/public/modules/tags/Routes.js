@@ -38,7 +38,7 @@ function initialize() {
         isDefault: false,
         views: {
             'main@': {
-                templateUrl: '/static/tags/templates/tags-form.html',
+                templateUrl: '/static/tags/templates/tag-form.html',
                 controller: TagFormController
             }
         }

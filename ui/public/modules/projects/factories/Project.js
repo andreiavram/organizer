@@ -3,6 +3,7 @@
  */
 
 var Projects = require("projects/Projects");
+var Config = require("base/Config");
 
 var Project = Projects.factory('Project', ['$resource', function Project($resource) {
     "use strict";
