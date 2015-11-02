@@ -47,6 +47,7 @@
     "angular-nl2br": "^1.0.2",
     "angular-resource": "^1.4.7",
     "angular-sanitize": "^1.4.7",
+    "angular-ui-bootstrap": "^0.14.3",
     "angular-ui-router": "~0.2.14",
     "angularjs-color-picker": "^0.6.4",
     "chance": "~0.7.5",

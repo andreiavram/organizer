@@ -1,8 +1,11 @@
 <div class="base">
     <div class = "page-header">
         <div class = "row">
-            <div class = "col-md-12">
+            <div class = "col-md-10">
                 <h1>Projects <small>get things done!</small></h1>
+            </div>
+            <div class = "col-md-2">
+                <a href="#" ui-sref="base.projects.create">Add project</a>
             </div>
         </div>
 
@@ -18,7 +21,7 @@
             </div>
             <div class = "col-md-1">
                 <div class = "btn-group btn-group-xs pull-right">
-                    <a class = "btn btn-default" ng-click="remove_task(task);"><div class = "glyphicon glyphicon-trash"></div></a>
+                    <a class = "btn btn-default" ng-click="removeProject(project);"><div class = "glyphicon glyphicon-trash"></div></a>
                 </div>
             </div>
         </div>

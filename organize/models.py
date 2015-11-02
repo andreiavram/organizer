@@ -62,7 +62,7 @@ class Project(models.Model):
     description = models.TextField(null=True, blank=True)
     slug = models.SlugField()
 
-    start_date = models.DateTimeField()
+    start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
 
     tags = models.ManyToManyField("organize.Tag", null=True, blank=True)

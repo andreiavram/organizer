@@ -1,16 +1,14 @@
 <div class="base">
     <div class = "page-header">
-        <h1>
-            <div ng-show="mode == 'view'" ng-bind="project.title"></div>
-            <div ng-show="mode == 'edit'"><input class = "no-border full-width" type = "text" ng-model = "task.title"></div>
-        </h1>
-    </div>
-
-    <div class = "row">
-        <div class = "col-md-12">
-            <tags-input class = "no-border" ng-show="mode == 'edit'" ng-model="tags" display-property="name" key-property="id" add-from-autocomplete-only="true" placeholder="">
-                <auto-complete source="load_tags($query)"></auto-complete>
-            </tags-input>
+        <div class = "row">
+            <div class = "col-md-10">
+                <h1>
+                    <div ng-bind="project.title"></div>
+                </h1>
+            </div>
+            <div class = "col-md-2">
+                <a href="#" ui-sref="base.projects.edit({id:project.id})">Edit</a>
+            </div>
         </div>
     </div>
 
@@ -25,15 +23,21 @@
     </div>
 
     <div class = "row">
+        <div class = "col-md-12">
+            <div ng-cloak>
+                <span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]" class = "label label-default" ng-repeat="tag in project.tags track by $index">
+                    [[ tag.name ]]
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class = "row">
         <ul>
             <li ng-repeat="task in project.tasks">
                 [[ task ]]
             </li>
         </ul>
-    </div>
-    <div class = "row">
-        <input type = "text" ng-model = "new_task.title">
-        <input type="submit" ng-click="save_project_task()">
     </div>
 
 </div>

@@ -45,6 +45,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = ("id", "slug", "title", "description", "start_date", "end_date", "tags", "tasks")
 
     tasks = TaskSerializer(many=True, read_only=True)
+    slug = serializers.ReadOnlyField()
 
 
 class UserTokenSerializer(TokenSerializer):

@@ -8,9 +8,9 @@ var OrganizerSetup = require("base/Setup");
 var TagsInput = require('ng-tags-input');
 var ColorPicker = require("angular-color-picker");
 var Elastic = require("angular-elastic");
+var BootstrapUI = require("angular-ui-bootstrap");
 
-
-var Projects = ng.module('Projects', [Resource, Sanitize, "mp.colorPicker", "ngTagsInput"])
+var Projects = ng.module('Projects', [Resource, Sanitize, Elastic, "mp.colorPicker", "ngTagsInput", BootstrapUI])
     .config([
         '$interpolateProvider',
         '$resourceProvider',
