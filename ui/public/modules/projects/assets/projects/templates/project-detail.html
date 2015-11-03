@@ -33,13 +33,62 @@
     </div>
 
     <div class = "row">
-        <ul>
-            <li ng-repeat="task in project.tasks">
-                [[ task ]]
-            </li>
-        </ul>
+        <div class = "col-md-12">
+            <div ng-cloak>
+                Starts [[ project.start_date|date:'dd.MM.yyyy']], <br>
+                Ends: [[ project.end_date|date:'dd.MM.yyyy']]
+            </div>
+        </div>
     </div>
 
+    <div class = "row">
+        <div class = "col-md-12">
+            <div ng-if="task_errors" ng-repeat="(field, errors) in task_errors">[[ field ]]: <span ng-repeat="e in errors">[[ e ]]</span></div>
+            <div class="input-group">
+                <input ng-show = "mode == 'add'" ng-keyup="process_task($event)" ng-model="new_task.title" type="text" placeholder="mai multe task-uri!" class = "form-control">
+                <input ng-show = "mode == 'search'" ng-keyup="process_search($event)" ng-model="query" type="text" placeholder="prea multe task-uri?" class = "form-control">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">[[ mode_names[mode] ]] <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="" ng-click="mode = 'search'">[[ mode_names['search'] ]]</a></li>
+                        <li><a href="" ng-click="mode = 'add'">[[ mode_names['add'] ]]</a></li>
+                    </ul>
+                    <input type="hidden" name="category" class="category">
+                </div><!-- /btn-group -->
+            </div>
+
+        </div>
+    </div>
+
+    <div class = "task_list">
+        <h2>Tasks</h2>
+        <div class = "row" ng-repeat="task in project.tasks"  ng-init = "task_class = 'task-normal'" ng-class="task_class"
+             ng-mouseenter="task_class = 'task-hover'"
+             ng-mouseleave="task_class = 'task-normal'">
+            <div class = "col-md-1">
+                <div class = "glyphicon" ng-class="{'glyphicon-unchecked': !task.completed, 'glyphicon-check': task.completed}" ng-click="toggle_completed(task)"></div>
+                <i class = "fa" ng-class="task_priority_icon(task)"></i>
+            </div>
+            <div class = "col-md-7" ui-sref="base.tasks.detail({ id: task.id })">
+                <div ng-bind="task.title" ng-class="{strikethrough: task.completed}"></div>
+                <div class = "task-list-description" ng-cloak ng-show="task.description.length > 0"><small>[[ task.description | limitTo:200 ]]</small></div>
+            </div>
+            <div class = "col-md-3">
+                <div class = "pull-right">
+                    <span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]"
+                          class = "label label-default" ng-repeat="tag in tags_for_task(task) track by $index"
+                            ng-click="add_tag_to_search(tag)">
+                        [[ tag.name ]]
+                    </span>
+                </div>
+            </div>
+            <div class = "col-md-1">
+                <div class = "btn-group btn-group-xs pull-right">
+                    <a class = "btn btn-default" ng-click="remove_task(task);"><div class = "glyphicon glyphicon-trash"></div></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

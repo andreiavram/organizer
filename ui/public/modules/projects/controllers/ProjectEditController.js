@@ -3,6 +3,7 @@
  */
 
 var Projects = require("projects/Projects");
+var _ = require("lodash");
 
 require("projects/factories/Project");
 require("tags/factories/Tag");
@@ -32,6 +33,26 @@ function ProjectEditController($scope, $stateParams, $state, Project, Tag) {
     $scope.load_tags = function load_tags(query) {
         return Tag.query({slug: query}).$promise;
     };
+
+    $scope.open = function($event, index) {
+        $scope.status[index].opened = true;
+    };
+
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
+
+    $scope.status = [{
+        opened: false
+    }, {
+        opened: false
+    }];
+
+    $scope.format = 'dd.MM.yyyy';
+
+
+
 }
 
 
@@ -40,6 +61,7 @@ Projects.controller("ProjectEditController", [
     "$stateParams",
     "$state",
     "Project",
+    "Task",
     "Tag",
 
     ProjectEditController

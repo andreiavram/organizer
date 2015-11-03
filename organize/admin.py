@@ -10,6 +10,11 @@ class ProjectAdmin(admin.ModelAdmin):
     model = Project
     exclude = ("slug", )
 
-admin.site.register(TaskItem)
+class TaskAdmin(admin.ModelAdmin):
+    model = TaskItem
+    list_display = ("title", "project")
+
+admin.site.register(TaskItem, TaskAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Tag, TagAdmin)
+
