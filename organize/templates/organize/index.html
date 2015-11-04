@@ -11,8 +11,8 @@
 
     <title>Organizer</title>
 
-    <link href="{% static "static/css/vendor.css" %}" rel="stylesheet">
-    <link href="{% static "static/css/bundle.css" %}" rel="stylesheet">
+    <link href="{% static "css/vendor.css" %}" rel="stylesheet">
+    <link href="{% static "css/bundle.css" %}" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -33,6 +33,15 @@
 
     </div>
 
+    <script>
+        var BASE_URL = "http://{{ request.get_host }}";
+        var Config = {
+            LOGIN_API_URL: BASE_URL + '/rest-auth/login/',
+            PROFILE_API_URL: BASE_URL + '/rest-auth/user/',
+            TEMPLATE_URL: BASE_URL + '/templates/',
+            URL_PREFIX: BASE_URL
+        };
+    </script>
 
     <script src="{% static "libs/jquery/dist/jquery.js" %}"></script>
     <script src="{% static "libs/bootstrap/dist/js/bootstrap.js" %}"></script>
