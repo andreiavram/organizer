@@ -1,18 +1,15 @@
-from django.contrib.auth.decorators import login_required
-
 # Create your views here.
 from django.db.models.query_utils import Q
-from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
-from organize.models import TaskItem, Tag, Project, TaskComment
 from rest_framework import viewsets, permissions
+
+from organize.models import TaskItem, Tag, Project, TaskComment
 from organize.serializers import TaskSerializer, TagSerializer, ProjectSerializer, TaskCommentSerializer
 
 
 class MainAppView(TemplateView):
-    template_name = "organize/main_app.html"
+    template_name = "organize/index.html"
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(MainAppView, self).dispatch(request, *args, **kwargs)
 
