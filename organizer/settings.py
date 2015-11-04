@@ -65,6 +65,7 @@ ROOT_URLCONF = 'organizer.urls'
 
 WSGI_APPLICATION = 'organizer.wsgi.application'
 
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + ("django.core.context_processors.request", )
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
@@ -135,12 +136,6 @@ RECAPTCHA_PRIVATE_KEY = ""
 GOOGLE_API_KEY = ""
 
 SITE_ID = 1
-URL_PREFIX = ""
-
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + \
-                              ('organizer.context_processors.url_prefix', )
-
-
 LOGIN_URL = "/admin/"
 
 REST_FRAMEWORK = {
