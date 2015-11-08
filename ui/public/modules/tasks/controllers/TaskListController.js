@@ -73,8 +73,7 @@ function TaskListController($scope, $stateParams, $location, Task, Tag) {
             }
 
             Task.save($scope.new_task, function (data) {
-                $scope.tasks.push(data);
-                $scope.refresh_tasks();
+                $scope.tasks.unshift(data);
                 $scope.new_task = {};
             }, function (data) {
                 $scope.task_errors = data.data;
@@ -106,13 +105,13 @@ function TaskListController($scope, $stateParams, $location, Task, Tag) {
         }[task.priority];
     };
 
-    $scope.redirect_to = function redirect_to(task) {
-        $location.path('tasks/' + task.id);
-    };
-
     $scope.toggle_completed = function toggle_completed(task) {
         task.completed = !task.completed;
         task.$update();
+    };
+
+    $scope.unsolved_tasks = function unsolved_tasks() {
+        return _.filter($scope.tasks, function (e) { return !e.completed; }).length;
     };
 
     $scope.tags_for_task = function (task) {
