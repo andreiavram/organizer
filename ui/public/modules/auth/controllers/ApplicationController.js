@@ -21,7 +21,6 @@ function ApplicationController($scope, $state) {
     });
 
     $scope.$on(AUTH_EVENTS.loginSuccess, function (data) {
-        console.log("login success");
         $state.go('base.tasks.list');
     });
 

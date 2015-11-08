@@ -35,12 +35,6 @@
 
     <script>
         var BASE_URL = "http://{{ request.get_host }}";
-        var Config = {
-            LOGIN_API_URL: BASE_URL + '/rest-auth/login/',
-            PROFILE_API_URL: BASE_URL + '/rest-auth/user/',
-            TEMPLATE_URL: BASE_URL + '/templates/',
-            URL_PREFIX: BASE_URL
-        };
     </script>
 
     <script src="{% static "libs/jquery/dist/jquery.js" %}"></script>

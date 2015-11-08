@@ -43,6 +43,18 @@ function initialize() {
             }
         }
     });
+
+    Router.addState({
+        name: 'base.tags.create',
+        url: '/tags/create/',
+        isDefault: false,
+        views: {
+            'main@': {
+                templateUrl: '/static/tags/templates/tag-form.html',
+                controller: TagFormController
+            }
+        }
+    });
 }
 
 module.exports = initialize;

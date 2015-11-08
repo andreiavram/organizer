@@ -3,8 +3,9 @@
  */
 
 var Navigation = require("navigation/Navigation");
+require("auth/services/AuthService");
 
-function NavigationController($scope) {
+function NavigationController($scope, $state, AuthService) {
     "use strict";
 
     $scope.menuClass = function (page) {
@@ -12,10 +13,17 @@ function NavigationController($scope) {
         // return page === current ? "active" : "";
         return "";
     };
+
+    $scope.userLogout = function () {
+        AuthService.logout();
+        $state.go("base.auth.login");
+    };
 }
 
 Navigation.controller("NavigationController", [
     "$scope",
+    "$state",
+    "AuthService",
 
     NavigationController
 ]);

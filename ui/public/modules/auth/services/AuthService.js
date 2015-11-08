@@ -15,9 +15,19 @@ function AuthService($http, $cookies) {
             .post(Config.LOGIN_API_URL, credentials)
             .then(function (res) {
                 Session.create(res.data.key, res.data.user, res.data.role);
-                $cookies.remove("auth-token");
+                $cookies.remove("auth-token")   ;
                 $cookies.put("auth-token", res.data.key);
                 return res.data.key;
+            });
+    };
+
+    authService.logout = function () {
+        return $http
+            .post(Config.LOGOUT_API_URL)
+            .then(function (res) {
+                Session.destroy();
+                $cookies.remove("auth-token");
+                return {};
             });
     };
 

@@ -41,7 +41,8 @@ gulp.task('less', function() {
 
 gulp.task('css', function() {
     "use strict";
-    var cssFilter = gulpFilter(['**/*.css', '**/*.less'], {restore: true});
+    var cssFilter = gulpFilter(['**/*.css', '**/*.less',
+        '**/ng-tags-input.bootstrap.css'], {restore: true});
     return gulp.src(mainBowerFiles(), { "base": BOWER_PATH })
         .pipe(cssFilter)
         .pipe(sourcemaps.init({loadMaps: true}))

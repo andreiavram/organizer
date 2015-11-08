@@ -6,7 +6,7 @@
             </div>
             <div clas = "col-md-2">
                 <h1 class = "pull-right">
-                    <a ng-click="redirect_to_form()" class = "btn btn-default"><span class = "glyphicon glyphicon-plus-sign"></span> Add</a>
+                    <a ui-sref="base.tags.create" class = "btn btn-default"><span class = "glyphicon glyphicon-plus-sign"></span> Add</a>
                 </h1>
             </div>
         </div>
@@ -18,7 +18,7 @@
              ng-mouseleave="tag_class  = 'task-normal'">
             <div class = "col-md-10">
                 <div style="min-height: 30px;">
-                    <a ng-click="redirect_to_tasks(tag)"><span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]"
+                    <a href="#" ui-sref="base.tags.detail({id: tag.id})"><span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]"
                           class = "label label-default">
                         [[ tag.name ]]
                     </span></a><br><small>[[ tag.description ]]</small>

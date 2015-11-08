@@ -8,7 +8,7 @@ var Tags = require("tags/Tags");
 require("tags/factories/Tag");
 require("tags/factories/LuminanceCalculator");
 
-function TagListController($scope, $location, Tag, LuminanceCalculator) {
+function TagListController($scope, $state, Tag, LuminanceCalculator) {
     "use strict";
     $scope.tags = Tag.query();
 
@@ -25,19 +25,14 @@ function TagListController($scope, $location, Tag, LuminanceCalculator) {
         $location.path("/tasks/tag/" + tag.id);
     };
 
-    // TODO: refactor this to use states
     $scope.redirect_to_form = function (tag) {
-        if (tag) {
-            $location.path("/tags/" + tag.id + "/update");
-        } else {
-            $location.path("/tags/create");
-        }
+        return tag ? $state.go("base.tags.detail", {id: tag.id}) : $state.go("base.tags.create");
     };
 }
 
 Tags.controller("TagListController", [
     "$scope",
-    "$location",
+    "$state",
     "Tag",
     "LuminanceCalculator",
 

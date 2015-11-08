@@ -9,8 +9,6 @@ var AUTH_EVENTS = require("auth/constants/auth_events");
 function LoginController($scope, $rootScope, AuthService) {
     "use strict";
 
-    console.log("login controller");
-
     $scope.credentials = {
         username: '',
         password: ''
