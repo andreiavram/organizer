@@ -11,6 +11,9 @@
     "font-awesome": "fontawesome#~4.4.0",
     "ng-tags-input": "~3.0.0",
     "angular-ui": "~0.4.0",
-    "angular-color-picker": "angularjs-color-picker#~0.6.9"
+    "angular-color-picker": "~1.0.10"
+  },
+  "resolutions": {
+    "angular-color-picker": "~1.0.10"
   }
 }

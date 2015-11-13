@@ -33,8 +33,8 @@ function TagFormController($scope, $stateParams, $state, Tag) {
 
 Tags.controller("TagFormController", [
     "$scope",
-    "$routeParams",
-    "$location",
+    "$stateParams",
+    "$state",
     "Task",
     "Tag",
 
