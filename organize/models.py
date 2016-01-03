@@ -29,10 +29,10 @@ class TaskItem(models.Model):
     title = models.CharField(max_length=1024)
     description = models.TextField(null=True, blank=True)
 
-    start_date = models.DateTimeField(null=True, blank=True)/home/yeti
+    start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)  # deadline
     completed_date = MonitorField(monitor='completed', when=[True, ])
-    estimated_time = models.IntegerField(null=True, blank=True)/home/yeti
+    estimated_time = models.IntegerField(null=True, blank=True)
 
     parent_task = models.ForeignKey("TaskItem", null=True, blank=True)
 
