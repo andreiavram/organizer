@@ -29,10 +29,10 @@ class TaskItem(models.Model):
     title = models.CharField(max_length=1024)
     description = models.TextField(null=True, blank=True)
 
-    start_date = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)/home/yeti
     end_date = models.DateTimeField(null=True, blank=True)  # deadline
     completed_date = MonitorField(monitor='completed', when=[True, ])
-    estimated_time = models.IntegerField(null=True, blank=True)
+    estimated_time = models.IntegerField(null=True, blank=True)/home/yeti
 
     parent_task = models.ForeignKey("TaskItem", null=True, blank=True)
 
@@ -55,6 +55,13 @@ class TaskItem(models.Model):
 
     def __unicode__(self):
         return self.title
+    
+    def save(self, **kwargs):
+        if self.project:
+            for tag in self.project.tags.all():
+                self.tags.add(tag)
+                
+        super(TaskItem, self).save(**kwargs)
 
 
 class Project(models.Model):
