@@ -43,10 +43,10 @@ class TaskItem(models.Model):
 
     status = models.CharField(max_length=255, choices=TAKSITEM_STATUSES, default=IDEA)
     completed = models.BooleanField(default=False)
-    priority = models. IntegerField(max_length=255, choices=TASKITEM_PRIORITIES, default=NORMAL)
+    priority = models. IntegerField(choices=TASKITEM_PRIORITIES, default=NORMAL)
 
     owner = models.ForeignKey("auth.User", null=True, blank=True)
-    tags = models.ManyToManyField("organize.Tag", null=True, blank=True, related_name="tasks")
+    tags = models.ManyToManyField("organize.Tag", blank=True, related_name="tasks")
 
     project = models.ForeignKey("organize.Project", null=True, blank=True, related_name="tasks")
 
@@ -57,11 +57,11 @@ class TaskItem(models.Model):
         return self.title
     
     def save(self, **kwargs):
+        super(TaskItem, self).save(**kwargs)
+
         if self.project:
             for tag in self.project.tags.all():
                 self.tags.add(tag)
-                
-        super(TaskItem, self).save(**kwargs)
 
 
 class Project(models.Model):
@@ -72,7 +72,7 @@ class Project(models.Model):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
 
-    tags = models.ManyToManyField("organize.Tag", null=True, blank=True)
+    tags = models.ManyToManyField("organize.Tag", blank=True)
 
     class Meta:
         ordering = ["-start_date"]

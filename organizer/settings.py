@@ -13,22 +13,13 @@ from django.conf import global_settings
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '9anmibfq5gs_kuyze((oi^b&iim3v!uoo@3xws(%u=60ms-#c9'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -37,10 +28,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'organize',
 
-    'south',
     'djangobower',
+    'django_extensions',
     'crispy_forms',
     'rest_framework',
     'rest_framework.authtoken',
@@ -48,7 +38,8 @@ INSTALLED_APPS = (
 
     'corsheaders',
 
-    'goodies'
+    'goodies',
+    'organize',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -65,7 +56,27 @@ ROOT_URLCONF = 'organizer.urls'
 
 WSGI_APPLICATION = 'organizer.wsgi.application'
 
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + ("django.core.context_processors.request", )
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates"),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                "django.template.context_processors.request",
+            ],
+        },
+    },
+]
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
@@ -97,12 +108,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,  'templates'),
-)
-
 from django.conf import global_settings
-STATICFILES_FINDERS = global_settings.STATICFILES_FINDERS + ('djangobower.finders.BowerFinder', )
+STATICFILES_FINDERS = global_settings.STATICFILES_FINDERS + ['djangobower.finders.BowerFinder', ]
 
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, "static")
 
