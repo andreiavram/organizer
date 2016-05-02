@@ -11,10 +11,8 @@ function AuthResolver($q, $rootScope, $state) {
             var unwatch = $rootScope.$watch('currentUser', function (currentUser) {
                 if (angular.isDefined(currentUser)) {
                     if (currentUser) {
-                        console.log(currentUser);
                         deferred.resolve(currentUser);
                     } else {
-                        console.log("rejected");
                         deferred.reject();
                         $state.go('base.auth.login');
                     }

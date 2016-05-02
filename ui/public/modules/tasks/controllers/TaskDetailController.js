@@ -6,7 +6,6 @@ var _ = require('lodash');
 
 var State = require('base/State');
 var Tasks = require('tasks/Tasks');
-var LuminanceCalculator = require("tags/factories/LuminanceCalculator");
 
 require("base/filters/UrlFilter");
 require('tags/factories/Tag');
@@ -34,8 +33,6 @@ function TaskDetailController($scope, $stateParams, $location, $filter, Task, Ta
     $scope.task.$promise.then(function(data){
         $scope.process_task_from_server();
     });
-
-    $scope.calculate_luminance = LuminanceCalculator;
 
     $scope.task_errors = {};
 

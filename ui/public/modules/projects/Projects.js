@@ -16,7 +16,6 @@ var Projects = ng.module('Projects', [Resource, Sanitize, Elastic, "mp.colorPick
         '$resourceProvider',
         '$httpProvider',
         'msdElasticConfig',
-
         OrganizerSetup
     ]);
 

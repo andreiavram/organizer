@@ -20,7 +20,6 @@ function ProjectEditController($scope, $stateParams, $state, Project, Tag) {
     }
 
     $scope.updateProject = function() {
-        console.log($scope.project);
         if ($scope.project.id) {
             Project.update($scope.project);
         } else {

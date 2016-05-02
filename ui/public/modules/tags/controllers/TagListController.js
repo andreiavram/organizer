@@ -6,13 +6,11 @@
 var Tags = require("tags/Tags");
 
 require("tags/factories/Tag");
-require("tags/factories/LuminanceCalculator");
+require("tags/factories/TagRepository");
 
-function TagListController($scope, $state, Tag, LuminanceCalculator) {
+function TagListController($scope, $state, Tag, TagRepository) {
     "use strict";
-    $scope.tags = Tag.query();
-
-    $scope.calculate_luminance = LuminanceCalculator;
+    $scope.tags = TagRepository.all();
 
     $scope.remove_tag = function (tag) {
         Tag.remove(tag, function (data) {
@@ -34,7 +32,7 @@ Tags.controller("TagListController", [
     "$scope",
     "$state",
     "Tag",
-    "LuminanceCalculator",
+    "TagRepository",
 
     TagListController
 ]);
