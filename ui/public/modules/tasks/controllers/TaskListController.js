@@ -11,12 +11,7 @@ var Tag = require('tags/factories/Tag');
 
 function TaskListController($scope, $stateParams, $location, Task, Tag, LuminanceCalculator) {
     "use strict";
-
-    this.remove_task = function remove_task(task) {
-        Task.remove(task, function (data) {
-            this.tasks = _.without(this.tasks, task);
-        });
-    };
+    var self = this;
 
     this.unsolved_tasks = function unsolved_tasks() {
         return _.filter(this.tasks, function (e) { return !e.completed; }).length;
@@ -24,6 +19,16 @@ function TaskListController($scope, $stateParams, $location, Task, Tag, Luminanc
 
     this.update_tasks = function(tasks) {
         this.tasks = _.sortBy(tasks, "changed_date").reverse();
+    };
+
+    this.remove_task = function(task) {
+        var self = this;
+        Task.remove({"id": task.id}, function (data) {
+            console.log("deleting", task, self.tasks);
+            self.tasks = _.filter(self.tasks, function (e) {
+                return e.id !== task.id;
+            });
+        });
     };
 }
 

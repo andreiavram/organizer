@@ -20,11 +20,11 @@ div.task-list-description {
     color: #666;
 }
 
-div.task-normal {
+task-list-item.task.task-normal {
     background-color: #fff;
 }
 
-div.task-hover {
+task-list-item.task.task-hover {
     background-color: #efefef;
     cursor: pointer;
 }

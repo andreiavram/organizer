@@ -29,7 +29,7 @@
         <div class = "row">
         <div class = "col-md-12">
             <div ng-cloak>
-                <span style="margin-right: 5px; color: [[ calculate_luminance(tag.color) ]]; background-color: [[ tag.color ]]" class = "label label-default" ng-repeat="tag in task.tags track by $index">
+                <span style="margin-right: 5px; color: [[ tag.luminance ]]; background-color: [[ tag.color ]]" class = "label label-default" ng-repeat="tag in task.tags track by $index">
                     [[ tag.name ]]
                 </span>
             </div>

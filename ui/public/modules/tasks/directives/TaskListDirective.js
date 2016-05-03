@@ -3,16 +3,19 @@ var Tasks = require('tasks/Tasks');
 function TaskListDirective() {
     "use strict";
     return {
-        restrict: "E",
+        restrict: "AE",
+        // bindToController: true,
         templateUrl: "/static/tasks/templates/task-list-component.html",
         controller: "TaskListController",
-        controllerAs: "taskListCtrl",
+        controllerAs: "taskList",
         scope: {
             tasks: "="
         },
-        link: function(scope, elem, attrs, taskListCtrl) {
-            scope.$watch("tasks", function(task_list) {
-                taskListCtrl.update_tasks(task_list);
+        link: function(scope, elem, attrs, taskList) {
+            scope.$watch("tasks", function(old, task_list) {
+                task_list.$promise.then(function (data) {
+                    taskList.update_tasks(task_list);
+                });
             });
         }
     };

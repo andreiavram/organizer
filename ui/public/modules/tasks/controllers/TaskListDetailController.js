@@ -18,7 +18,7 @@ function TaskListDetailController($scope, $stateParams, $location, Task, Tag, Ta
     this.task = {
         priority_icon: "",
         state_icon: "",
-        tag_objs: [],
+        tag_objs: []
     };
 
 
@@ -49,7 +49,6 @@ function TaskListDetailController($scope, $stateParams, $location, Task, Tag, Ta
         this.task.completed = !this.task.completed;
         this.task.$update();
     };
-    
 }
 
 Tasks.controller("TaskListDetailController", [

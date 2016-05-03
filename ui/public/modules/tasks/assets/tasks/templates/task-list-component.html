@@ -1,6 +1,6 @@
 <div class = "task_list">
-    <task-list-item class = "row" ng-repeat="task in tasks" task="task" ng-init = "task_class = 'task-normal'" ng-class="task_class"
+    <div task-list-item class = "row task" ng-repeat="task in taskList.tasks" task="task" ng-init = "task_class = 'task-normal'" ng-class="task_class"
          ng-mouseenter="task_class = 'task-hover'"
          ng-mouseleave="task_class = 'task-normal'">
-    </task-list-item>
+    </div>
 </div>
