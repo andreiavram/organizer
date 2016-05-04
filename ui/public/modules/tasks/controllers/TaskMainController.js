@@ -47,6 +47,10 @@ function TaskMainController($scope, $stateParams, $location, Task, Tag, TagRepos
         $scope.refresh_tasks();
     };
 
+    $scope.unsolved_tasks = function unsolved_tasks() {
+        return _.filter(this.tasks, function (e) { return !e.completed; }).length;
+    };
+
     $scope.$watchCollection("search_tags", function (n, o) {
         $scope.refresh_tasks();
     });
@@ -74,12 +78,6 @@ function TaskMainController($scope, $stateParams, $location, Task, Tag, TagRepos
         }
 
         var at_index = $scope.new_task.title.indexOf("@");
-    };
-
-    $scope.remove_task = function remove_task(task) {
-        Task.remove(task, function (data) {
-            $scope.tasks = _.without($scope.tasks, task);
-        });
     };
     
     $scope.remove_tag_from_search = function (tag) {

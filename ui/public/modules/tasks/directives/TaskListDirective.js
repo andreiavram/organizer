@@ -12,11 +12,9 @@ function TaskListDirective() {
             tasks: "="
         },
         link: function(scope, elem, attrs, taskList) {
-            scope.$watch("tasks", function(old, task_list) {
-                task_list.$promise.then(function (data) {
-                    taskList.update_tasks(task_list);
-                });
-            });
+            scope.$watch("tasks", function(task_list, old_task_list) {
+                taskList.update_tasks(task_list);
+            }, true);
         }
     };
 }

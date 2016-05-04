@@ -13,18 +13,16 @@ function TaskListController($scope, $stateParams, $location, Task, Tag, Luminanc
     "use strict";
     var self = this;
 
-    this.unsolved_tasks = function unsolved_tasks() {
-        return _.filter(this.tasks, function (e) { return !e.completed; }).length;
-    };
-
+    this.tasks = [];
     this.update_tasks = function(tasks) {
-        this.tasks = _.sortBy(tasks, "changed_date").reverse();
+        if (tasks.constructor === Array) {
+            this.tasks = _.sortBy(tasks, "changed_date").reverse();
+        }
     };
 
     this.remove_task = function(task) {
         var self = this;
         Task.remove({"id": task.id}, function (data) {
-            console.log("deleting", task, self.tasks);
             self.tasks = _.filter(self.tasks, function (e) {
                 return e.id !== task.id;
             });
