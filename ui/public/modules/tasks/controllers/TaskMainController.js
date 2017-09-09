@@ -21,7 +21,7 @@ function TaskMainController($scope, $stateParams, $location, Task, Tag, TagRepos
         });
     }
 
-    $scope.tasks = Task.query();
+    $scope.tasks = [];
     $scope.tags = TagRepository.all();
 
     $scope.search_tags = [];

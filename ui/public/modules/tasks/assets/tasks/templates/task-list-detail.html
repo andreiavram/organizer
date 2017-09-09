@@ -6,6 +6,7 @@
     <span ng-bind="item.task.title" ng-class="{strikethrough: item.task.completed}"></span>
     &nbsp;<span ng-show="item.task.project" class = 'label label-success'>Project</span>
     <div class = "task-list-description" ng-cloak ng-show="item.task.description.length > 0"><small>[[ item.task.description | limitTo:200 ]]</small></div>
+    <div class = "task-list-description" ng-cloak><small>[[ item.task.changed_date|date ]]</small></div>
 </div>
 <div class = "col-md-3">
     <div class = "pull-right">
@@ -21,5 +22,4 @@
         <a class = "btn btn-default" ng-click="item.taskList.remove_task(item.task);"><div class = "glyphicon glyphicon-trash"></div></a>
     </div>
 </div>
-
 
