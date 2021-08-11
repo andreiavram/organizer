@@ -3,9 +3,4 @@
 *.pyc
 *.log
 db.sqlite3
-static/bower_components/*
 organizer/local_settings*
-ui/node_modules*
-ui/app/bower_components*
-ui/dist*
-ui/bower_components*
