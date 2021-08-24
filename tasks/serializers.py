@@ -1,5 +1,7 @@
 from rest_auth.serializers import TokenSerializer
 from rest_framework.authtoken.models import Token
+from rest_framework.relations import PrimaryKeyRelatedField
+
 from tasks.models import TaskItem, Tag, Project, TaskComment
 from rest_framework import serializers
 
@@ -13,6 +15,25 @@ class TaskCommentSerializer(serializers.ModelSerializer):
         fields = ("id", "description", "user", "timestamp")
 
 
+class TagBaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ("id", "name", "color", "slug")
+
+    id = serializers.IntegerField(read_only=False, required=False)
+
+
+class TagSerializer(TagBaseSerializer):
+    class Meta:
+        model = Tag
+        fields = ("id", "slug", "name", "description", "color", "count")
+
+    count = serializers.SerializerMethodField()
+
+    def get_count(self, obj):
+        return obj.tasks.count()
+
+
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskItem
@@ -20,23 +41,15 @@ class TaskSerializer(serializers.ModelSerializer):
                   "owner", "priority", "completed", "tags", "completed_date", "changed_date", "order", "project",
                   "comments")
 
-    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), required=False)
+    tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, allow_null=True, required=False)
     comments = TaskCommentSerializer(many=True, read_only=True)
 
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ("id", "slug", "name", "description", "color", "count")
-
-    slug = serializers.SerializerMethodField()
-    count = serializers.SerializerMethodField()
-
-    def get_count(self, obj):
-        return obj.tasks.count()
-
-    def get_slug(self, obj):
-        return obj.slug
+    # def create(self, validated_data):
+    #     tags = validated_data.pop('tags')
+    #     instance = super(TaskSerializer, self).create(validated_data)
+    #     instance.tags = Tag.objects.filter(id__in=[t['id'] for t in tags])
+    #     instance.save()
+    #     return instance
 
 
 class ProjectSerializer(serializers.ModelSerializer):

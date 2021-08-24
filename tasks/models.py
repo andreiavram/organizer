@@ -54,7 +54,7 @@ class TaskItem(models.Model):
     class Meta:
         ordering = ["order", "-priority", "-start_date", "-created_date"]
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
     
     def save(self, **kwargs):
@@ -78,7 +78,7 @@ class Project(models.Model):
     class Meta:
         ordering = ["-start_date"]
 
-    def str(self):
+    def __str__(self):
         return self.title
 
     def save(self, **kwargs):
@@ -98,7 +98,7 @@ class Tag(models.Model):
             self.slug = slugify(self.name)
         super(Tag, self).save(**kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -108,5 +108,5 @@ class TaskComment(models.Model):
     description = models.TextField(null=True, blank=True)
     task = models.ForeignKey(TaskItem, on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.description

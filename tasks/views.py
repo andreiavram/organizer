@@ -17,7 +17,7 @@ class MainAppView(TemplateView):
 class TaskItemViewSet(viewsets.ModelViewSet):
     queryset = TaskItem.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
 
     def __init__(self, *args, **kwargs):
         self.query_tags = []
@@ -44,7 +44,7 @@ class TaskItemViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (permissions.IsAuthenticated, )
+    # permission_classes = (permissions.IsAuthenticated, )
 
     def __init__(self, *args, **kwargs):
         self.query_slug = None

@@ -147,14 +147,21 @@ SITE_ID = 1
 LOGIN_URL = "/admin/"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
 }
 
 REST_AUTH_SERIALIZERS = {
     "TOKEN_SERIALIZER": "tasks.serializers.UserTokenSerializer",
 }
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
+]
 
 try:
     from local_settings import *
