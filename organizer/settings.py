@@ -122,7 +122,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'organizer2',
-        'USER': 'postgres',
+        'USER': 'yeti',
         'PASSWORD': 'sql123.',
         'HOST': '127.0.0.1',
         'PORT': '5432',
