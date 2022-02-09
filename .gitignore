@@ -4,3 +4,5 @@
 *.log
 db.sqlite3
 organizer/local_settings*
+.env
+.envrc
