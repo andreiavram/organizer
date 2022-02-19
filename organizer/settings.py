@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_filters',
+
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -151,8 +153,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
+        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -164,7 +170,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 try:
-    from local_settings import *
+    from .local_settings import *
 except ImportError:
     pass
+
 
