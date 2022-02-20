@@ -51,6 +51,8 @@ class TaskItem(models.Model):
 
     project = models.ForeignKey("tasks.Project", null=True, blank=True, related_name="tasks", on_delete=models.SET_NULL)
 
+    for_today = models.BooleanField(default=False)
+
     class Meta:
         ordering = ["order", "-priority", "-start_date", "-created_date"]
 

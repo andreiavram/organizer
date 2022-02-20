@@ -42,5 +42,5 @@ class TaskFilterSet(filters.FilterSet):
     class Meta:
         model = TaskItem
         fields = ["contains", "completed", "status", "priority", "tags",
-                  "completed_date", "owner", "start_date", "end_date"]
+                  "completed_date", "owner", "start_date", "end_date", "for_today"]
 

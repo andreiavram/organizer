@@ -39,7 +39,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = TaskItem
         fields = ("id", "title", "description", "start_date", "end_date", "estimated_time", "parent_task", "status",
                   "owner", "priority", "completed", "tags", "completed_date", "changed_date", "order", "project",
-                  "comments")
+                  "comments", "for_today")
 
     tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, allow_null=True, required=False)
     comments = TaskCommentSerializer(many=True, read_only=True)
