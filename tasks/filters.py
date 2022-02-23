@@ -33,6 +33,8 @@ class TaskFilterSet(filters.FilterSet):
     completed = filters.BooleanFilter("completed")
     status = filters.ChoiceFilter(choices=TaskItem.TAKSITEM_STATUSES)
     priority = filters.ChoiceFilter(choices=TaskItem.TASKITEM_PRIORITIES)
+    completed_date = filters.DateFilter("completed_date", "date")
+
     tags = filters.ModelMultipleChoiceFilter(
         field_name="tags__slug",
         to_field_name="slug",

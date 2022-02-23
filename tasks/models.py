@@ -32,7 +32,7 @@ class TaskItem(models.Model):
 
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)  # deadline
-    completed_date = MonitorField(monitor='completed', when=[True, ])
+    completed_date = MonitorField(monitor='completed', when=[True, ], null=True, blank=True)
     estimated_time = models.IntegerField(null=True, blank=True)
 
     parent_task = models.ForeignKey("TaskItem", null=True, blank=True, on_delete=models.SET_NULL)
@@ -54,12 +54,14 @@ class TaskItem(models.Model):
     for_today = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["order", "-priority", "-start_date", "-created_date"]
+        ordering = ["order", "-priority", "-start_date", "-changed_date", "-created_date"]
 
     def __str__(self):
         return self.title
     
     def save(self, **kwargs):
+        if not self.completed and self.completed_date:
+            self.completed_date = None
         super(TaskItem, self).save(**kwargs)
 
         if self.project:
