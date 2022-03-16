@@ -55,10 +55,12 @@ class TaskSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ("id", "slug", "title", "description", "start_date", "end_date", "tags", "tasks")
+        fields = ("id", "slug", "title", "description", "start_date", "end_date", "tags")
 
-    tasks = TaskSerializer(many=True, read_only=True)
-    slug = serializers.ReadOnlyField()
+    # tasks = TaskSerializer(many=True, read_only=True)
+    # slug = serializers.ReadOnlyField()
+    start_date = serializers.DateTimeField(required=False, format="%d/%m/%Y")
+    end_date = serializers.DateTimeField(required=False, format="%d/%m/%Y")
 
 
 class UserTokenSerializer(TokenSerializer):
