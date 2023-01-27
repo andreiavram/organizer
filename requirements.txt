@@ -10,7 +10,7 @@ django-taggit==3.1.0
 djangorestframework==3.14.0
 djangorestframework-sso==0.4.1
 psycopg2==2.9.5
-PyJWT==1.7.1
+PyJWT==2.4.0
 pytz==2021.3
 six==1.16.0
 sqlparse==0.4.2
