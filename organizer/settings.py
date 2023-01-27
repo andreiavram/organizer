@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
+    'dj_rest_auth',
 
     'corsheaders',
 
@@ -122,9 +122,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'organizer2',
-        'USER': 'yeti',
+        'USER': 'yeti_db',
         'PASSWORD': 'sql123.',
         'HOST': '127.0.0.1',
         'PORT': '5432',

@@ -1,4 +1,4 @@
-from rest_auth.serializers import TokenSerializer
+from dj_rest_auth.serializers import TokenSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.relations import PrimaryKeyRelatedField
 
