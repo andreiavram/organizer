@@ -16,5 +16,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', MainAppView.as_view(), {}, "index"),
     path('api/', include(router.urls)),
-    path('rest-auth/', include('rest_auth.urls'))
+    path('rest-auth/', include('dj_rest_auth.urls')),
 ]
