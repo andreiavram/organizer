@@ -1,11 +1,10 @@
 # Create your views here.
-from django.db.models.query_utils import Q
 from django.views.generic.base import TemplateView
 from rest_framework import viewsets, permissions
 
 from tasks.filters import TaskFilterSet
 from tasks.models import TaskItem, Tag, Project, TaskComment
-from tasks.serializers import TaskSerializer, TagSerializer, ProjectSerializer, TaskCommentSerializer
+from tasks.api.serializers import TaskSerializer, TagSerializer, ProjectSerializer, TaskCommentSerializer
 
 
 class MainAppView(TemplateView):

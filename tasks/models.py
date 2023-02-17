@@ -46,7 +46,7 @@ class TaskItem(models.Model):
     completed = models.BooleanField(default=False)
     priority = models. IntegerField(choices=TASKITEM_PRIORITIES, default=NORMAL)
 
-    owner = models.ForeignKey("auth.User", null=True, blank=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(get_user_model(), null=True, blank=True, on_delete=models.CASCADE)
     tags = models.ManyToManyField("tasks.Tag", blank=True, related_name="tasks")
 
     project = models.ForeignKey("tasks.Project", null=True, blank=True, related_name="tasks", on_delete=models.SET_NULL)

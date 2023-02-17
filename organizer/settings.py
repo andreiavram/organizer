@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_sso',
     'rest_auth',
 
     'corsheaders',
@@ -85,6 +86,7 @@ WSGI_APPLICATION = 'organizer.wsgi.application'
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
+AUTH_USER_MODEL = "user.OrganizerUser"
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -151,6 +153,7 @@ LOGIN_URL = "/admin/"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_sso.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -163,6 +166,17 @@ REST_FRAMEWORK = {
 
 REST_AUTH_SERIALIZERS = {
     "TOKEN_SERIALIZER": "tasks.serializers.UserTokenSerializer",
+}
+
+REST_FRAMEWORK_SSO = {
+    "AUTHENTICATE_PAYLOAD": "tasks.utils.authenticate_payload",
+    "VERIFY_SESSION_TOKEN": False,
+    "IDENTITY": "organizer",
+    "ACCEPTED_ISSUERS": ["scoutfile", ],
+    "KEY_STORE_ROOT": BASE_DIR / "keys",
+    "PUBLIC_KEYS": {
+        "scoutfile": ["scoutfile-2023.pem"]
+    }
 }
 
 CORS_ALLOWED_ORIGINS = [
