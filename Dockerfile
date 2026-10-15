@@ -45,10 +45,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     STATIC_ROOT=/app/staticfiles \
     HOME=/home/organizer
 
+# /app is created here, owned by the app user: WORKDIR would create it as root, and COPY --chown
+# changes only the copied files — not /app itself — so collectstatic could not create STATIC_ROOT.
 RUN groupadd --system --gid 1000 organizer \
  && useradd --system --uid 1000 --gid organizer --create-home --home-dir /home/organizer organizer \
- && mkdir -p /data/beat \
- && chown -R organizer:organizer /data
+ && mkdir -p /data/beat /app \
+ && chown -R organizer:organizer /data /app
 
 COPY --from=builder /opt/venv /opt/venv
 WORKDIR /app
