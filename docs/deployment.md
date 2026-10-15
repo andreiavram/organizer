@@ -1,5 +1,10 @@
 # Deployment (GitHub Actions)
 
+> **Moving to Coolify.** A container deployment (Docker Compose on the Coolify server) is prepared in
+> [`deploy/coolify/`](../deploy/coolify/README.md); [`CUTOVER.md`](../deploy/coolify/CUTOVER.md) is the
+> move. Until the `DEPLOY_TARGET_PRODUCTION` repository variable is `coolify`, everything below (the SSH
+> deploy to the supervisor host) is still what runs.
+
 Two workflows deploy to production on push to **`develop`** (the branch the production server
 tracks). Both also run on `pull_request` (build/test only — no deploy) and can be triggered
 manually via `workflow_dispatch`. They're modelled on the weinland / volunhub deploy pipelines.

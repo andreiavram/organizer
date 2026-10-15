@@ -80,6 +80,13 @@ consolidated in-tree from the now-deprecated `organizer-ui` repository.
   index `/1`); if Redis is down, broadcasts are logged and dropped and writes still succeed. The
   Angular side is a root `TaskEventsService` the task views subscribe to.
 
+- **Deployment** — today: SSH workflows to a supervisor host (`docs/deployment.md`). Prepared:
+  Coolify (`deploy/coolify/README.md`) — one `Dockerfile` with targets `app` (roles web / worker /
+  beat / migrate via `deploy/docker/entrypoint.sh`) and `edge` (nginx with the Angular bundle +
+  collected static baked in), stacked by `docker-compose.coolify.yml`. `DEPLOY_TARGET_PRODUCTION=coolify`
+  switches the workflows over. When adding a backend URL prefix, add it to
+  `deploy/docker/nginx/nginx.conf` **and** `frontend/ngsw-config.json`, or the SPA swallows it.
+
 ## Authentication
 
 Two mechanisms:

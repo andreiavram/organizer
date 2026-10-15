@@ -82,6 +82,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # First on purpose: /healthz/ answers before anything below can touch the database or check the
+    # Host header. See organizer/health.py.
+    "organizer.health.HealthCheckMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
@@ -192,7 +195,9 @@ DATABASES = {
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / "static"
+# Overridable so the container image can collect into its own directory (the edge image copies it
+# from there) instead of into the source tree's static/, which also holds STATICFILES_DIRS.
+STATIC_ROOT = Path(config("STATIC_ROOT", default=str(BASE_DIR / "static")))
 
 STATICFILES_DIRS = (
     ("css", BASE_DIR / "static" / "css"),

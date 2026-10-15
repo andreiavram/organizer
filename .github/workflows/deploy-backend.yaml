@@ -7,6 +7,10 @@ name: deploy-backend
 #   Variables: SSH_USER, SSH_HOST, SSH_PORT, DEPLOY_PATH (e.g. /var/app/organizer),
 #              RESTART_COMMAND (e.g. "sudo supervisorctl restart organizer")
 #   Secrets:   SSH_KEY (private key authorised on the server)
+#
+# Coolify (deploy/coolify/README.md): DEPLOY_TARGET_PRODUCTION=coolify switches the deploy from the SSH
+# job to the deploy-coolify job. Variables COOLIFY_URL, COOLIFY_APP_UUID_PRODUCTION, SMOKE_URL_PRODUCTION;
+# secret COOLIFY_API_TOKEN.
 
 on:
   workflow_dispatch:
@@ -21,6 +25,10 @@ on:
       - 'organizer/**'
       - 'tasks/**'
       - '.github/workflows/deploy-backend.yaml'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'docker-compose.coolify.yml'
+      - 'deploy/**'
   pull_request:
     branches: [develop]
     types: [opened, synchronize, reopened]
@@ -33,6 +41,10 @@ on:
       - 'organizer/**'
       - 'tasks/**'
       - '.github/workflows/deploy-backend.yaml'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'docker-compose.coolify.yml'
+      - 'deploy/**'
 
 jobs:
   test:
@@ -89,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: test
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop')
+    if: vars.DEPLOY_TARGET_PRODUCTION != 'coolify' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop'))
     steps:
       - name: Configure SSH
         env:
@@ -167,3 +179,33 @@ jobs:
       - name: Restart service
         if: ${{ always() }}
         run: ssh production "${{ vars.RESTART_COMMAND || 'sudo systemctl restart organizer' }}"
+
+  deploy-coolify:
+    name: Deploy to Coolify
+    runs-on: ubuntu-latest
+    environment: production
+    needs: test
+    # Exactly one of the legacy SSH deploy and this one runs, chosen by DEPLOY_TARGET_PRODUCTION
+    # (unset = legacy). Coolify builds the images itself; this job only triggers, waits and
+    # smoke-tests. See deploy/coolify/README.md.
+    if: vars.DEPLOY_TARGET_PRODUCTION == 'coolify' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop'))
+    # Shared with the other deploy workflow: a push touching backend and frontend queues the second
+    # deploy behind the first instead of overlapping two migrations.
+    concurrency:
+      group: deploy-coolify-production
+      cancel-in-progress: false
+    timeout-minutes: 30
+    env:
+      COOLIFY_URL: ${{ vars.COOLIFY_URL }}
+      COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+      APP_UUID: ${{ vars.COOLIFY_APP_UUID_PRODUCTION }}
+      SMOKE_URL: ${{ vars.SMOKE_URL_PRODUCTION }}
+      DEPLOY_TIMEOUT: "1620"
+    steps:
+      - name: Fetch the deploy script
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: deploy/coolify
+          fetch-depth: 1
+      - name: Deploy and wait
+        run: bash deploy/coolify/deploy.sh

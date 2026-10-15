@@ -1,0 +1,36 @@
+# Coolify builds from a clean clone, so this mostly matters for a local `docker build` from a working
+# tree full of dev artifacts. Anything secret or data-shaped must never enter an image layer.
+.git
+.github
+.claude
+.idea
+.junie
+.vscode
+.venv
+venv
+.ruff_cache
+**/__pycache__
+**/*.pyc
+openspec
+docs
+organizer-ui
+
+# Frontend: rebuilt inside the image from package-lock.json.
+frontend/node_modules
+frontend/dist
+frontend/.angular
+
+# Secrets and data dumps — supplied at runtime by Coolify, never baked in.
+.env
+.env.*
+!.env.example
+.envrc
+*.key
+*.pem
+*.sql
+*.dump
+*.sqlite3
+celerybeat-schedule*
+
+# Collected static from a local `collectstatic` run (the image collects into /app/staticfiles itself).
+staticfiles

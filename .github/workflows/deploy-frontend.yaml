@@ -6,6 +6,9 @@ name: deploy-frontend
 # Required GitHub config (Settings → Secrets and variables → Actions):
 #   Variables: SSH_USER, SSH_HOST, SSH_PORT, FRONTEND_WEB_ROOT (e.g. /var/www/organizer)
 #   Secrets:   SSH_KEY (private key authorised on the server)
+#
+# Coolify: the bundle is built into the `edge` image instead; DEPLOY_TARGET_PRODUCTION=coolify skips
+# the SSH steps and runs deploy-coolify (see deploy-backend.yaml for its variables).
 
 on:
   workflow_dispatch:
@@ -14,11 +17,15 @@ on:
     paths:
       - 'frontend/**'
       - '.github/workflows/deploy-frontend.yaml'
+      - 'Dockerfile'
+      - 'deploy/docker/nginx/**'
   pull_request:
     branches: [develop]
     paths:
       - 'frontend/**'
       - '.github/workflows/deploy-frontend.yaml'
+      - 'Dockerfile'
+      - 'deploy/docker/nginx/**'
 
 jobs:
   test_and_build:
@@ -49,7 +56,7 @@ jobs:
 
       # --- Deploy (only on push to develop / manual dispatch) ---
       - name: Configure SSH
-        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop')
+        if: vars.DEPLOY_TARGET_PRODUCTION != 'coolify' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop'))
         env:
           SSH_USER: ${{ vars.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -69,15 +76,15 @@ jobs:
           END
 
       - name: Bundle dist
-        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop')
+        if: vars.DEPLOY_TARGET_PRODUCTION != 'coolify' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop'))
         run: tar czf organizer-dist.tar.gz -C frontend/dist/organizer-frontend/browser .
 
       - name: Copy bundle to server
-        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop')
+        if: vars.DEPLOY_TARGET_PRODUCTION != 'coolify' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop'))
         run: 'scp organizer-dist.tar.gz production:'
 
       - name: Unpack into web root
-        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop')
+        if: vars.DEPLOY_TARGET_PRODUCTION != 'coolify' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop'))
         run: |
           # No sudo: the deploy user owns $WEB_ROOT (one-time on the server:
           #   sudo mkdir -p /var/www/organizer
@@ -91,3 +98,33 @@ jobs:
             tar xzf organizer-dist.tar.gz -C "$WEB_ROOT"
             rm -f organizer-dist.tar.gz
           '
+
+  deploy-coolify:
+    name: Deploy to Coolify
+    runs-on: ubuntu-latest
+    environment: production
+    needs: test_and_build
+    # Exactly one of the legacy SSH deploy and this one runs, chosen by DEPLOY_TARGET_PRODUCTION
+    # (unset = legacy). Coolify builds the images itself; this job only triggers, waits and
+    # smoke-tests. See deploy/coolify/README.md.
+    if: vars.DEPLOY_TARGET_PRODUCTION == 'coolify' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/develop'))
+    # Shared with the other deploy workflow: a push touching backend and frontend queues the second
+    # deploy behind the first instead of overlapping two migrations.
+    concurrency:
+      group: deploy-coolify-production
+      cancel-in-progress: false
+    timeout-minutes: 30
+    env:
+      COOLIFY_URL: ${{ vars.COOLIFY_URL }}
+      COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+      APP_UUID: ${{ vars.COOLIFY_APP_UUID_PRODUCTION }}
+      SMOKE_URL: ${{ vars.SMOKE_URL_PRODUCTION }}
+      DEPLOY_TIMEOUT: "1620"
+    steps:
+      - name: Fetch the deploy script
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: deploy/coolify
+          fetch-depth: 1
+      - name: Deploy and wait
+        run: bash deploy/coolify/deploy.sh
