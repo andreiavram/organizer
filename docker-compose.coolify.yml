@@ -1,0 +1,92 @@
+# Organizer on Coolify — the production stack. Read deploy/coolify/README.md first.
+#
+# Coolify deploys this file from the repository through the `coolify-yetilabs` GitHub App (build pack
+# "Docker Compose", compose location /docker-compose.coolify.yml) and BUILDS the images on the
+# Coolify host. The app services all declare the same build; BuildKit's layer cache makes every
+# build after the first a no-op.
+#
+# Domain: attached in the Coolify UI to the `edge` service only (port 80). Nothing else is exposed.
+#
+# Environment: paste the old host's .env into the application's environment editor (Developer
+# view), with the changes in deploy/coolify/env.example. Coolify writes it to the .env beside this
+# file, and every app container reads it through `env_file`.
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: Dockerfile
+    target: app
+    args:
+      GIT_SHA: ${SOURCE_COMMIT:-unknown}
+  restart: unless-stopped
+  env_file:
+    - path: .env
+      required: false
+  environment:
+    # Container facts, not configuration: these override anything pasted.
+    STATIC_ROOT: /app/staticfiles
+    DEBUG: "False"
+
+services:
+  migrate:
+    <<: *app
+    command: ["migrate"]
+    restart: "no"
+    # Coolify reports a one-shot that exited 0 as "exited"; that is the success state. A non-zero
+    # exit fails the deploy and the previous containers keep serving.
+    exclude_from_hc: true
+
+  web:
+    <<: *app
+    command: ["web"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      # /healthz/ answers any Host and never touches the database (organizer/health.py).
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8000/healthz/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  worker:
+    <<: *app
+    command: ["worker"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A organizer inspect ping -d celery@$$HOSTNAME --timeout 10 || exit 1"]
+      interval: 60s
+      timeout: 20s
+      retries: 3
+      start_period: 60s
+
+  beat:
+    <<: *app
+    command: ["beat"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - beat:/data/beat
+    exclude_from_hc: true
+
+  edge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: edge
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/nginx-health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  beat:
