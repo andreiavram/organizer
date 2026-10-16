@@ -20,11 +20,15 @@ set -euo pipefail
 DEPLOY_TIMEOUT="${DEPLOY_TIMEOUT:-1500}"
 POLL_SECONDS="${POLL_SECONDS:-15}"
 
+# api METHOD PATH. Reads (GET) retry on transient errors; the deploy trigger (POST — Coolify
+# answers 405 to a GET on /deploy since 4.4) does not, so a retry can never queue a second deploy.
 api() {
-    curl -fsS --retry 3 --retry-delay 5 --retry-all-errors \
+    local method="$1" retry=()
+    [ "$method" = GET ] && retry=(--retry 3 --retry-delay 5 --retry-all-errors)
+    curl -fsS -X "$method" "${retry[@]}" \
         -H "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
         -H "Accept: application/json" \
-        "${COOLIFY_URL}/api/v1/$1"
+        "${COOLIFY_URL}/api/v1/$2"
 }
 
 # python3 rather than jq: present on every runner and every dev box here
@@ -40,7 +44,7 @@ print("" if data is None else data)' "$1"
 }
 
 echo "Triggering deployment of application ${APP_UUID}"
-response="$(api "deploy?uuid=${APP_UUID}&force=false")" || {
+response="$(api POST "deploy?uuid=${APP_UUID}&force=false")" || {
     echo "::error::Coolify refused the deploy request (check COOLIFY_URL, token ability 'deploy', APP_UUID)."
     exit 2
 }
@@ -54,7 +58,7 @@ echo "Deployment ${deployment_uuid} queued — ${COOLIFY_URL}/project (Deploymen
 deadline=$(( $(date +%s) + DEPLOY_TIMEOUT ))
 last_status=""
 while :; do
-    status="$(api "deployments/${deployment_uuid}" | json_get status || true)"
+    status="$(api GET "deployments/${deployment_uuid}" | json_get status || true)"
     if [ "$status" != "$last_status" ]; then
         echo "$(date -u +%H:%M:%S) status: ${status:-unknown}"
         last_status="$status"
