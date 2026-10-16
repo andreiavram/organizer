@@ -36,7 +36,11 @@ services:
     # exit fails the deploy and the previous containers keep serving.
     exclude_from_hc: true
 
-  web:
+  # Named organizer-web, never plain `web`: the stack joins Coolify's shared `coolify` network to
+  # reach Postgres/Redis, and Docker DNS resolves a service name across EVERY network a container is
+  # on. Other stacks there (VolunHub, geogame) have a `web` too, so `web:8000` in the edge nginx
+  # round-robined requests into other apps — and theirs into this one. Keep the name unique.
+  organizer-web:
     <<: *app
     command: ["web"]
     depends_on:
@@ -80,7 +84,7 @@ services:
       target: edge
     restart: unless-stopped
     depends_on:
-      web:
+      organizer-web:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1/nginx-health"]

@@ -79,6 +79,12 @@ editor; compose hands it to every app container via `env_file`. `settings.py` al
 pure environment variables when there is no `.env` file. Nothing secret is in an image layer
 (`.dockerignore`).
 
+**Service names that other apps' containers can reach must be unique on the server.** The stack
+joins Coolify's shared `coolify` network (to reach Postgres/Redis), and Docker DNS resolves a
+service name across every network a container is on. The backend is therefore `organizer-web`, not
+`web`: VolunHub and geogame both have a `web`, and the first deploy's `web:8000` upstream
+round-robined requests between the three apps.
+
 **Shared Postgres and Redis.** Organizer is a single-user app; a dedicated database resource buys
 nothing. It gets its own role and database in the shared Postgres 17 (a `pg_dump`/`pg_restore` from
 16 → 17 is supported) and its own DB numbers in the shared Redis.
